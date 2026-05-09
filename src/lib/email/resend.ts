@@ -1,6 +1,11 @@
 import { Resend } from "resend";
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy init — evita crash en build cuando RESEND_API_KEY no está disponible
+let _resend: Resend | null = null;
+export function getResend(): Resend {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY ?? "placeholder");
+  return _resend;
+}
 
 export const FROM = process.env.EMAIL_FROM ?? "Mar Boutique <hola@marboutique.co>";
 export const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").filter(Boolean);

@@ -1,4 +1,4 @@
-import { resend, FROM, ADMIN_EMAILS } from "./resend";
+import { getResend, FROM, ADMIN_EMAILS } from "./resend";
 import { formatCOP, formatDate } from "@/lib/utils/format";
 
 // ── Paleta usada en emails ─────────────────────────────────────
@@ -83,7 +83,7 @@ export async function sendOrderConfirmationEmail(order: any) {
     <p style="margin-top:20px;font-size:12px;">¿Preguntas? Escríbenos por WhatsApp o a hola@marboutique.co.</p>
   `);
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: order.shipping_email,
     subject: `Pedido confirmado ${order.order_number} — Mar Boutique`,
@@ -116,7 +116,7 @@ export async function sendNewOrderAdminEmail(order: any) {
     </a>
   `);
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: ADMIN_EMAILS,
     subject: `[Mar Boutique] Nuevo pedido ${order.order_number} — ${formatCOP(order.total)}`,
@@ -136,7 +136,7 @@ export async function sendPaymentFailedEmail(order: any) {
     <p style="margin-top:20px;font-size:12px;">Si el problema persiste, escríbenos a hola@marboutique.co.</p>
   `);
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: order.shipping_email,
     subject: `Problema con tu pago — Mar Boutique`,
@@ -172,7 +172,7 @@ export async function sendOrderStatusEmail(order: any, newStatus: string) {
     </a>
   `);
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: order.shipping_email,
     subject: msg.subject,
