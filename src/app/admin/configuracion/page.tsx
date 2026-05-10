@@ -1,0 +1,96 @@
+import { AlertTriangle, CheckCircle, ExternalLink } from "lucide-react";
+
+function EnvRow({ label, envKey, secret }: { label: string; envKey: string; secret?: boolean }) {
+  const val = process.env[envKey];
+  const ok = !!val && val !== "placeholder";
+  const display = ok ? (secret ? "••••••••••••" : val) : "No configurado";
+  return (
+    <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+      <div className="min-w-0">
+        <p className="text-sm text-gray-700">{label}</p>
+        <p className="text-xs text-gray-400 font-mono mt-0.5">{display}</p>
+      </div>
+      {ok ? (
+        <CheckCircle size={16} className="text-green-500 shrink-0 ml-4" />
+      ) : (
+        <AlertTriangle size={16} className="text-amber-500 shrink-0 ml-4" />
+      )}
+    </div>
+  );
+}
+
+export default function AdminConfiguracionPage() {
+  return (
+    <div className="p-6 max-w-3xl space-y-8">
+      <h1 className="text-xl font-semibold text-gray-800">Configuración</h1>
+
+      {/* Integraciones */}
+      <div className="bg-white border border-gray-200 rounded overflow-hidden">
+        <div className="px-5 py-3.5 border-b border-gray-100 bg-gray-50">
+          <p className="text-sm font-[600] text-gray-700">Variables de entorno</p>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Configuradas en Vercel → Project Settings → Environment Variables
+          </p>
+        </div>
+        <div className="px-5">
+          <EnvRow label="URL del sitio" envKey="NEXT_PUBLIC_SITE_URL" />
+          <EnvRow label="Supabase URL" envKey="NEXT_PUBLIC_SUPABASE_URL" />
+          <EnvRow label="Supabase Anon Key" envKey="NEXT_PUBLIC_SUPABASE_ANON_KEY" secret />
+          <EnvRow label="Supabase Service Role Key" envKey="SUPABASE_SERVICE_ROLE_KEY" secret />
+          <EnvRow label="Email remitente" envKey="EMAIL_FROM" />
+          <EnvRow label="Resend API Key" envKey="RESEND_API_KEY" secret />
+          <EnvRow label="Emails admin" envKey="ADMIN_EMAILS" />
+          <EnvRow label="Wompi Public Key" envKey="NEXT_PUBLIC_WOMPI_PUBLIC_KEY" />
+          <EnvRow label="Wompi Integrity Key" envKey="WOMPI_INTEGRITY_KEY" secret />
+          <EnvRow label="Wompi Events Key" envKey="WOMPI_EVENTS_KEY" secret />
+        </div>
+      </div>
+
+      {/* Links útiles */}
+      <div className="bg-white border border-gray-200 rounded overflow-hidden">
+        <div className="px-5 py-3.5 border-b border-gray-100 bg-gray-50">
+          <p className="text-sm font-[600] text-gray-700">Paneles externos</p>
+        </div>
+        <div className="divide-y divide-gray-100">
+          {[
+            { label: "Supabase Dashboard", href: "https://app.supabase.com" },
+            { label: "Vercel Dashboard", href: "https://vercel.com" },
+            { label: "Resend Dashboard", href: "https://resend.com" },
+            { label: "Wompi Dashboard", href: "https://dashboard.wompi.co" },
+          ].map(({ label, href }) => (
+            <a
+              key={href}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition-colors"
+            >
+              <span className="text-sm text-gray-700">{label}</span>
+              <ExternalLink size={14} className="text-gray-400" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Decisiones pendientes */}
+      <div className="bg-amber-50 border border-amber-200 rounded p-5">
+        <div className="flex items-start gap-3">
+          <AlertTriangle size={18} className="text-amber-600 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-[600] text-amber-800 mb-2">
+              Decisiones pendientes antes del lanzamiento
+            </p>
+            <ul className="space-y-1.5 text-xs text-amber-700">
+              <li><strong>DP-03</strong> — Responsabilidades tributarias (IVA, facturación electrónica)</li>
+              <li><strong>DP-05</strong> — Proveedor email transaccional (Resend configurado, verificar dominio)</li>
+              <li><strong>DP-07</strong> — Identidad visual: logo, paleta, tipografías definitivas</li>
+              <li><strong>DP-08</strong> — Dominio definitivo (marboutique.co) — actualizar NEXT_PUBLIC_SITE_URL</li>
+              <li><strong>DP-09</strong> — Documentos legales: Términos, Privacidad, Datos (Ley 1581/2012)</li>
+              <li><strong>DP-10</strong> — Esquema de tarifa de envío en Fase 1</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
