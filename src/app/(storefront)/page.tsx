@@ -146,6 +146,93 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── LOOKBOOK FERIA GANADERA ─────────────────────────────── */}
+      <section className="py-20 bg-[#faf7f1]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <span className="text-[10px] tracking-[0.25em] uppercase text-[#f0c419] font-[500]">
+                Próximo evento · Montería 2026
+              </span>
+              <h2
+                className="text-4xl text-[#0e0e0e] mt-1"
+                style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
+              >
+                Feria Ganadera
+              </h2>
+            </div>
+            <Link
+              href="/colecciones"
+              className="hidden sm:inline-flex items-center gap-1.5 text-[11px] tracking-[0.15em] uppercase text-[#6a6356] hover:text-[#0e0e0e] transition-colors font-[500]"
+            >
+              Ver colección <ArrowRight size={12} />
+            </Link>
+          </div>
+
+          {/* Grid editorial */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {/* Foto hero — ocupa 2 columnas y 2 filas */}
+            <div className="col-span-2 row-span-2 relative overflow-hidden aspect-[3/4] md:aspect-auto">
+              <Image
+                src="/colecciones/feria-ganadera/fg-08.jpg"
+                alt="Feria Ganadera Montería 2026"
+                fill
+                className="object-cover object-top hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+            {/* Fotos secundarias */}
+            {[
+              { src: "/colecciones/feria-ganadera/fg-03.jpg", alt: "Cordobesa — Feria Ganadera" },
+              { src: "/colecciones/feria-ganadera/fg-09.jpg", alt: "Sinuana — colección Montería" },
+              { src: "/colecciones/feria-ganadera/fg-04.jpg", alt: "Montería sello postal" },
+              { src: "/colecciones/feria-ganadera/fg-11.jpg", alt: "Colección Feria Ganadera 2026" },
+            ].map((foto) => (
+              <div key={foto.src} className="relative aspect-square overflow-hidden">
+                <Image
+                  src={foto.src}
+                  alt={foto.alt}
+                  fill
+                  className="object-cover object-top hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Strip de fotos adicionales */}
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mt-2">
+            {[
+              "/colecciones/feria-ganadera/fg-07.jpg",
+              "/colecciones/feria-ganadera/fg-05.jpg",
+              "/colecciones/feria-ganadera/fg-14.jpg",
+              "/colecciones/feria-ganadera/fg-10.jpg",
+              "/colecciones/feria-ganadera/fg-13.jpg",
+              "/colecciones/feria-ganadera/fg-02.jpg",
+            ].map((src) => (
+              <div key={src} className="relative aspect-square overflow-hidden">
+                <Image
+                  src={src}
+                  alt="Feria Ganadera Montería 2026 — Ricamo"
+                  fill
+                  className="object-cover object-top hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 33vw, 17vw"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8 sm:hidden">
+            <Link
+              href="/colecciones"
+              className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.15em] uppercase text-[#6a6356] hover:text-[#0e0e0e] transition-colors font-[500]"
+            >
+              Ver colección completa <ArrowRight size={12} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ── NUEVA COLECCIÓN ─────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-end justify-between mb-10">
