@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Package, ShoppingBag, Users,
-  Tag, BarChart2, Settings, Archive, LogOut, Layers, FolderOpen,
+  Tag, BarChart2, Settings, Archive, LogOut, Layers,
+  Palette, CalendarDays, Star, MessageSquare, ImageIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { createClient } from "@/lib/supabase/client";
@@ -14,11 +15,15 @@ const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/productos", label: "Productos", icon: Package },
   { href: "/admin/pedidos", label: "Pedidos", icon: ShoppingBag },
-  { href: "/admin/inventario", label: "Inventario", icon: Archive },
-  { href: "/admin/clientes", label: "Clientes", icon: Users },
+  { href: "/admin/cotizaciones", label: "Cotizaciones", icon: MessageSquare },
+  { href: "/admin/inventario", label: "Inventario dual", icon: Archive },
+  { href: "/admin/configurador", label: "Diseños config.", icon: Palette },
+  { href: "/admin/eventos", label: "Eventos activos", icon: CalendarDays },
+  { href: "/admin/influencers", label: "Influencers", icon: Star },
   { href: "/admin/colecciones", label: "Colecciones", icon: Layers },
-  { href: "/admin/categorias", label: "Categorías", icon: FolderOpen },
+  { href: "/admin/clientes", label: "Clientes", icon: Users },
   { href: "/admin/descuentos", label: "Descuentos", icon: Tag },
+  { href: "/admin/marca", label: "Marca personal", icon: ImageIcon },
   { href: "/admin/reportes", label: "Reportes", icon: BarChart2 },
   { href: "/admin/configuracion", label: "Configuración", icon: Settings },
 ];
@@ -42,7 +47,7 @@ export function AdminSidebar() {
             className="text-xl text-[#F3EDE0]"
             style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
           >
-            Mar Boutique
+            Ricamo
           </span>
         </Link>
         <p className="text-[9px] tracking-[0.2em] uppercase text-[#897568] mt-0.5">

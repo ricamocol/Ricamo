@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Lock, AlertCircle } from "lucide-react";
 import { useCartStore } from "@/lib/store/cart";
+import { createClient } from "@/lib/supabase/client";
 import { formatCOP } from "@/lib/utils/format";
 import type { CheckoutForm } from "@/types";
 
@@ -31,6 +32,7 @@ export default function CheckoutPage() {
     coupon_code: "",
     terms_accepted: false,
   });
+  const [prefilled, setPrefilled] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<"form" | "payment">("form");
@@ -46,6 +48,54 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (items.length === 0) router.replace("/carrito");
   }, [items, router]);
+
+  // Precargar datos del usuario autenticado
+  useEffect(() => {
+    if (prefilled) return;
+    const supabase = createClient();
+
+    async function prefillFromUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const updates: Partial<CheckoutForm> = {};
+
+      if (user.email) updates.email = user.email;
+
+      // Buscar perfil en customers
+      const { data: customer } = await supabase
+        .from("customers")
+        .select("full_name, phone")
+        .eq("auth_user_id", user.id)
+        .maybeSingle();
+
+      if (customer) {
+        if (customer.full_name) updates.full_name = customer.full_name;
+        if (customer.phone) updates.phone = customer.phone;
+      }
+
+      // Buscar dirección por defecto
+      const { data: address } = await supabase
+        .from("customer_addresses")
+        .select("address, city, department")
+        .eq("customer_id", user.id)
+        .eq("is_default", true)
+        .maybeSingle();
+
+      if (address) {
+        if (address.address) updates.address = address.address;
+        if (address.city) updates.city = address.city;
+        if (address.department) updates.department = address.department;
+      }
+
+      if (Object.keys(updates).length > 0) {
+        setForm((f) => ({ ...f, ...updates }));
+      }
+      setPrefilled(true);
+    }
+
+    prefillFromUser();
+  }, [prefilled]);
 
   function set(field: keyof CheckoutForm, value: string | boolean) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -157,7 +207,7 @@ export default function CheckoutPage() {
                     id="city" type="text" autoComplete="address-level2"
                     value={form.city}
                     onChange={(v) => set("city", v)}
-                    placeholder="Cartagena"
+                    placeholder="Medellín"
                   />
                 </Field>
                 <Field label="Departamento *" id="department">
@@ -354,7 +404,6 @@ function WompiWidget({ data }: { data: NonNullable<ReturnType<typeof useState<an
         </p>
       </div>
 
-      {/* Widget de Wompi — se monta via script */}
       <form action="https://checkout.wompi.co/p/" method="GET">
         <input type="hidden" name="public-key" value={data.publicKey} />
         <input type="hidden" name="currency" value={data.currency} />

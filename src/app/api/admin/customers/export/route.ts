@@ -68,7 +68,7 @@ export async function GET() {
   ];
 
   const csv = csvRows.join("\r\n");
-  const filename = `clientes-marboutique-${new Date().toISOString().slice(0, 10)}.csv`;
+  const filename = `clientes-ricamo-${new Date().toISOString().slice(0, 10)}.csv`;
 
   return new NextResponse(csv, {
     headers: {

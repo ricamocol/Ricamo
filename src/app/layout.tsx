@@ -19,16 +19,16 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mar Boutique — Mujeres que visten con intención",
-    template: "%s | Mar Boutique",
+    default: "Ricamo — Camisetas para festivales y eventos de Colombia",
+    template: "%s | Ricamo",
   },
   description:
-    "Ropa femenina con estilo playero y costero desde Cartagena, Colombia. Prendas versátiles, atemporales y auténticas.",
-  keywords: ["ropa femenina", "boutique Cartagena", "moda playera", "vestidos Colombia", "ropa mujer"],
+    "Camisetas temáticas para festivales y eventos de Colombia. Feria Ganadera, Fiestas del Mar, Feria de las Flores y más. También personalizadas — diseña la tuya.",
+  keywords: ["camisetas eventos colombia", "camisetas feria ganadera", "camisetas personalizadas", "ricamo", "camisetas festivales colombia", "María José"],
   openGraph: {
     type: "website",
     locale: "es_CO",
-    siteName: "Mar Boutique",
+    siteName: "Ricamo",
   },
 };
 

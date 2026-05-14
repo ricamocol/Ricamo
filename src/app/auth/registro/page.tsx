@@ -102,7 +102,7 @@ export default function RegistroPage() {
         >
           Crear cuenta
         </h1>
-        <p className="text-sm text-[#897568]">Únete a la comunidad Mar Boutique</p>
+        <p className="text-sm text-[#897568]">Únete a la comunidad Ricamo</p>
       </div>
 
       <div className="bg-white border border-[#DDD5C4] p-8 space-y-5">
@@ -207,7 +207,7 @@ export default function RegistroPage() {
               className="mt-0.5 accent-[#3D2B1F]"
             />
             <span className="text-xs text-[#897568]">
-              Quiero recibir novedades, colecciones y ofertas exclusivas de Mar Boutique por email.
+              Quiero recibir novedades, colecciones y ofertas exclusivas de Ricamo por email.
             </span>
           </label>
 

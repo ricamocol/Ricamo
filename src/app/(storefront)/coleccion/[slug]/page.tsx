@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return { title: "Colección no encontrada" };
   return {
     title: data.name,
-    description: data.description ?? `Explora la colección ${data.name} de Mar Boutique`,
+    description: data.description ?? `Explora la colección ${data.name} de Ricamo`,
   };
 }
 

@@ -114,7 +114,7 @@ export async function GET() {
 
   // Add instructions sheet
   const instructions = [
-    ["INSTRUCCIONES DE CARGA MASIVA — MAR BOUTIQUE"],
+    ["INSTRUCCIONES DE CARGA MASIVA — RICAMO"],
     [""],
     ["ESTRUCTURA DEL ARCHIVO"],
     ["• Cada fila representa UNA VARIANTE (talla + color)."],

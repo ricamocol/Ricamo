@@ -41,8 +41,8 @@ export default function AdminConfiguracionPage() {
           <EnvRow label="Resend API Key" envKey="RESEND_API_KEY" secret />
           <EnvRow label="Emails admin" envKey="ADMIN_EMAILS" />
           <EnvRow label="Wompi Public Key" envKey="NEXT_PUBLIC_WOMPI_PUBLIC_KEY" />
-          <EnvRow label="Wompi Integrity Key" envKey="WOMPI_INTEGRITY_KEY" secret />
-          <EnvRow label="Wompi Events Key" envKey="WOMPI_EVENTS_KEY" secret />
+          <EnvRow label="Wompi Integrity Secret" envKey="WOMPI_INTEGRITY_SECRET" secret />
+          <EnvRow label="Wompi Events Secret" envKey="WOMPI_EVENTS_SECRET" secret />
         </div>
       </div>
 
@@ -84,7 +84,7 @@ export default function AdminConfiguracionPage() {
               <li><strong>DP-03</strong> — Responsabilidades tributarias (IVA, facturación electrónica)</li>
               <li><strong>DP-05</strong> — Proveedor email transaccional (Resend configurado, verificar dominio)</li>
               <li><strong>DP-07</strong> — Identidad visual: logo, paleta, tipografías definitivas</li>
-              <li><strong>DP-08</strong> — Dominio definitivo (marboutique.co) — actualizar NEXT_PUBLIC_SITE_URL</li>
+              <li><strong>DP-RIC-07</strong> — Dominio definitivo (ricamo.co) — actualizar NEXT_PUBLIC_SITE_URL</li>
               <li><strong>DP-09</strong> — Documentos legales: Términos, Privacidad, Datos (Ley 1581/2012)</li>
               <li><strong>DP-10</strong> — Esquema de tarifa de envío en Fase 1</li>
             </ul>

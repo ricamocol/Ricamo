@@ -146,7 +146,7 @@ export const useCartStore = create<CartStore>()(
         }),
     }),
     {
-      name: "mar-boutique-cart",
+      name: "ricamo-cart",
       storage: createJSONStorage(() => localStorage),
     }
   )

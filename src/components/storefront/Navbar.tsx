@@ -9,8 +9,10 @@ import { useCartStore } from "@/lib/store/cart";
 
 const NAV_LINKS = [
   { href: "/catalogo", label: "Catálogo" },
-  { href: "/colecciones", label: "Colecciones" },
-  { href: "/nosotras", label: "Nosotras" },
+  { href: "/colecciones", label: "Eventos" },
+  { href: "/configura", label: "Diseña" },
+  { href: "/cotiza", label: "Cotiza" },
+  { href: "/maria-jose", label: "María José" },
 ];
 
 export function Navbar() {
@@ -66,7 +68,7 @@ export function Navbar() {
               className="font-display-italic text-[22px] text-[#3D2B1F] tracking-tight leading-none select-none"
               style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
             >
-              Mar Boutique
+              Ricamo
             </span>
           </Link>
 

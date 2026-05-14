@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { formatCOP, formatDate } from "@/lib/utils/format";
 import { OrderStatusActions } from "@/components/admin/OrderStatusActions";
 
@@ -9,7 +9,7 @@ interface Props {
 
 export default async function AdminPedidoDetailPage({ params }: Props) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = createServiceClient();
 
   const { data: order } = await supabase
     .from("orders")

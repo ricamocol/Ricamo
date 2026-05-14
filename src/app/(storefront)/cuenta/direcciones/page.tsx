@@ -212,7 +212,7 @@ export default function DireccionesPage() {
                 <input
                   value={form.city}
                   onChange={(e) => field("city", e.target.value)}
-                  placeholder="Cartagena"
+                  placeholder="Medellín"
                   className={INPUT}
                   required
                 />

@@ -10,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             className="text-2xl text-[#3D2B1F]"
             style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif", fontStyle: "italic" }}
           >
-            Mar Boutique
+            Ricamo
           </span>
         </Link>
       </header>
@@ -21,7 +21,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </main>
 
       <footer className="py-4 text-center text-[10px] tracking-[0.15em] uppercase text-[#CEC3AB]">
-        © {new Date().getFullYear()} Mar Boutique · Cartagena, Colombia
+        © {new Date().getFullYear()} Ricamo · Medellín, Colombia
       </footer>
     </div>
   );

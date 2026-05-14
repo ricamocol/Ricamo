@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHmac } from "crypto";
+import { createHash } from "crypto";
 import { createServiceClient } from "@/lib/supabase/server";
 import { sendOrderConfirmationEmail, sendNewOrderAdminEmail } from "@/lib/email/templates";
 import type { CartItem, CheckoutForm } from "@/types";
@@ -21,7 +21,7 @@ function buildWompiSignature(
   secret: string
 ): string {
   const str = `${reference}${amountInCents}${currency}${secret}`;
-  return createHmac("sha256", secret).update(str).digest("hex");
+  return createHash("sha256").update(str).digest("hex");
 }
 
 export async function POST(req: NextRequest) {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Carrito vacío" }, { status: 400 });
     }
 
-    const supabase = await createServiceClient();
+    const supabase = createServiceClient();
 
     // 1. Obtener o crear cliente — RB-CHK-07
     let customerId: string | null = null;
@@ -81,6 +81,7 @@ export async function POST(req: NextRequest) {
         shipping_cost: shippingCost,
         total,
         wompi_reference: wompiReference,
+        cart_session_id: sessionId,
         terms_accepted: form.terms_accepted,
         terms_accepted_at: new Date().toISOString(),
       })
