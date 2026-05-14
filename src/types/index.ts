@@ -1,8 +1,11 @@
 // ── ENUMS ─────────────────────────────────────────────────────
 
-export type ProductStatus = "draft" | "active" | "archived";
+export type ProductStatus = "draft" | "active" | "archived" | "published";
+
+export type OrderFlow = "A" | "B" | "C";
 
 export type OrderStatus =
+  // Flujo A — pre-diseñados
   | "pending_payment"
   | "paid"
   | "preparing"
@@ -12,9 +15,19 @@ export type OrderStatus =
   | "return_requested"
   | "return_in_transit"
   | "return_received"
-  | "refunded";
+  | "refunded"
+  // Flujos B/C — Ricamo personalizados
+  | "cotizacion_pendiente"
+  | "pendiente_aprobacion"
+  | "en_ajustes"
+  | "aprobado_pendiente_pago"
+  | "en_produccion"
+  | "rechazado";
 
 export type DiscountType = "percentage" | "fixed";
+
+// Modo de entrega según inventario dual — RB-INV
+export type DeliveryMode = "fast" | "on_demand" | "sold_out";
 
 // ── CATÁLOGO ──────────────────────────────────────────────────
 
@@ -59,6 +72,10 @@ export interface ProductVariant {
   reserved: number;
   attributes: VariantAttributes;
   available_stock: number; // stock - reserved (calculado)
+  // Inventario dual Ricamo — RB-INV-01
+  stock_pre_producido: number;
+  bajo_demanda_habilitado: boolean;
+  tiempo_produccion_dias: number;
 }
 
 export interface Product {
@@ -82,6 +99,27 @@ export interface Product {
   is_on_sale?: boolean;
   is_sold_out?: boolean;
   effective_price?: number;
+  // Entrega — computado a partir de variantes
+  delivery_mode?: DeliveryMode;
+  tiempo_produccion_dias?: number;
+}
+
+// Helper: calcula el modo de entrega de una variante
+export function getDeliveryMode(
+  variant?: Pick<ProductVariant, "stock_pre_producido" | "bajo_demanda_habilitado"> | null
+): DeliveryMode {
+  if (!variant) return "sold_out";
+  if (variant.stock_pre_producido > 0) return "fast";
+  if (variant.bajo_demanda_habilitado) return "on_demand";
+  return "sold_out";
+}
+
+// Helper: modo de entrega para un producto (usa la variante con mejor disponibilidad)
+export function getProductDeliveryMode(variants?: ProductVariant[]): DeliveryMode {
+  if (!variants?.length) return "sold_out";
+  if (variants.some((v) => v.stock_pre_producido > 0)) return "fast";
+  if (variants.some((v) => v.bajo_demanda_habilitado)) return "on_demand";
+  return "sold_out";
 }
 
 // ── CARRITO ───────────────────────────────────────────────────
@@ -124,28 +162,56 @@ export interface OrderItem {
   total_price: number;
 }
 
+export interface CommunicationMessage {
+  author: "customer" | "admin";
+  message: string;
+  attachments?: string[];
+  created_at: string;
+}
+
 export interface Order {
   id: string;
   order_number: string;
   customer_id: string | null;
   status: OrderStatus;
+  // Flujo Ricamo
+  flow: OrderFlow;
+  customization_data: Record<string, unknown> | null;
+  // Envío
   shipping_name: string;
   shipping_email: string;
   shipping_phone: string;
   shipping_address: string;
   shipping_city: string;
   shipping_department: string;
+  // Financiero
   subtotal: number;
   discount_amount: number;
   shipping_cost: number;
   total: number;
+  cotizacion_price: number | null;
+  // Pago
   wompi_transaction_id: string | null;
   wompi_reference: string | null;
+  wompi_link_id: string | null;
+  wompi_link_url: string | null;
   paid_at: string | null;
-  tracking_number: string | null;
+  payment_reminder_sent_at: {
+    day3?: string;
+    day7?: string;
+    day14?: string;
+  } | null;
+  // Courier
   courier: string | null;
+  tracking_number: string | null;
   shipped_at: string | null;
   delivered_at: string | null;
+  // Aprobación B/C
+  approved_at: string | null;
+  rejected_at: string | null;
+  rejection_reason: string | null;
+  communication_thread: CommunicationMessage[] | null;
+  // Meta
   notes: string | null;
   created_at: string;
   updated_at: string;
@@ -189,7 +255,7 @@ export interface WishlistItem {
   product?: Product;
 }
 
-// ── PROMOCIONES ───────────────────────────────────────────────
+// ── PROMOCIONES / INFLUENCERS ─────────────────────────────────
 
 export interface Promotion {
   id: string;
@@ -206,6 +272,65 @@ export interface Promotion {
   ends_at: string;
   is_active: boolean;
   is_cumulative: boolean;
+  influencer_id: string | null; // null = cupón general
+}
+
+export interface Influencer {
+  id: string;
+  name: string;
+  handle: string | null;
+  email: string | null;
+  phone: string | null;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface InfluencerAttribution {
+  id: string;
+  influencer_id: string;
+  promotion_id: string;
+  order_id: string;
+  customer_email: string;
+  order_total: number;
+  created_at: string;
+}
+
+// ── EVENTOS ACTIVOS ───────────────────────────────────────────
+
+export interface ActiveEvent {
+  id: string;
+  name: string;
+  city: string;
+  starts_at: string;
+  ends_at: string;
+  banner_text: string;
+  is_active: boolean;
+  created_at: string;
+}
+
+// ── CONFIGURADOR ──────────────────────────────────────────────
+
+export interface ConfiguratorDesign {
+  id: string;
+  name: string;
+  image_url: string;
+  event_tag: string | null;
+  style_tag: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+// ── COTIZACIONES ──────────────────────────────────────────────
+
+export interface CotizacionAttachment {
+  id: string;
+  order_id: string;
+  file_url: string;
+  file_name: string;
+  file_type: string | null;
+  uploaded_by: "customer" | "admin";
+  created_at: string;
 }
 
 // ── CHECKOUT ──────────────────────────────────────────────────

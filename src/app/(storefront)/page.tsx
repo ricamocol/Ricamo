@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { createServiceClient } from "@/lib/supabase/server";
 import { ProductCard } from "@/components/storefront/ProductCard";
-import type { Product } from "@/types";
+import type { Product, DeliveryMode } from "@/types";
 
 const COLLECTIONS = [
   { name: "Feria Ganadera", city: "Montería", emoji: "🐄", color: "#f0c419" },
@@ -15,11 +15,29 @@ async function getNewestProducts(): Promise<Product[]> {
   const db = createServiceClient();
   const { data } = await db
     .from("products")
-    .select(`id, name, slug, base_price, compare_price, images, is_on_sale, effective_price, is_sold_out`)
+    .select(`
+      id, name, slug, base_price, compare_price, images,
+      is_on_sale, effective_price, is_sold_out,
+      product_variants (
+        stock_pre_producido, bajo_demanda_habilitado, tiempo_produccion_dias
+      )
+    `)
     .eq("status", "published")
     .order("created_at", { ascending: false })
     .limit(4);
-  return (data ?? []) as Product[];
+
+  return ((data ?? []) as Record<string, unknown>[]).map((p) => {
+    const variants = (p.product_variants as { stock_pre_producido: number; bajo_demanda_habilitado: boolean; tiempo_produccion_dias: number }[] | null) ?? [];
+    let delivery_mode: DeliveryMode = "sold_out";
+    let tiempo_produccion_dias = 3;
+    if (variants.some((v) => v.stock_pre_producido > 0)) {
+      delivery_mode = "fast";
+    } else if (variants.some((v) => v.bajo_demanda_habilitado)) {
+      delivery_mode = "on_demand";
+      tiempo_produccion_dias = variants.find((v) => v.bajo_demanda_habilitado)?.tiempo_produccion_dias ?? 3;
+    }
+    return { ...p, delivery_mode, tiempo_produccion_dias } as Product;
+  });
 }
 
 export default async function HomePage() {
