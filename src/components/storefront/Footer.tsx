@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-// TODO DP-RIC-06: reemplazar con los handles reales de María José en Instagram y TikTok
 const SOCIAL = [
   {
     label: "Instagram",
@@ -33,23 +32,34 @@ const SOCIAL = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#3D2B1F] text-[#CEC3AB] mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer className="bg-[#0e0e0e] text-[#faf7f1] mt-auto">
 
-          {/* MARCA */}
-          <div className="md:col-span-2">
-            <span
-              className="block text-2xl text-white mb-3"
-              style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
-            >
-              Ricamo
-            </span>
-            <p className="text-sm leading-relaxed text-[#897568] max-w-xs">
-              Camisetas para festivales y eventos de Colombia. Diseña la tuya
-              o elige de nuestras colecciones temáticas.
+      {/* BRAND BLOCK */}
+      <div className="border-b border-[#2a2a2a] py-14 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-4">
+          <span
+            className="text-[#f0c419] text-[64px] leading-none select-none"
+            style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
+          >
+            Ricamo
+          </span>
+          <p className="text-[#6a6356] text-sm tracking-[0.2em] uppercase">
+            lo creas, lo llevas
+          </p>
+        </div>
+      </div>
+
+      {/* LINKS GRID */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+          {/* DESCRIPCIÓN + REDES */}
+          <div>
+            <p className="text-sm leading-relaxed text-[#6a6356] max-w-xs mb-5">
+              Camisetas temáticas para festivales y eventos de Colombia.
+              Diseña la tuya o elige de nuestras colecciones.
             </p>
-            <div className="flex gap-4 mt-5">
+            <div className="flex gap-4">
               {SOCIAL.map(({ label, href, icon }) => (
                 <a
                   key={label}
@@ -57,7 +67,7 @@ export function Footer() {
                   target={href.startsWith("mailto") ? undefined : "_blank"}
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-[#897568] hover:text-[#EAC9C9] transition-colors"
+                  className="text-[#6a6356] hover:text-[#f0c419] transition-colors"
                 >
                   {icon}
                 </a>
@@ -67,7 +77,7 @@ export function Footer() {
 
           {/* TIENDA */}
           <div>
-            <h4 className="text-[10px] tracking-[0.2em] uppercase text-[#EAC9C9] mb-4 font-[500]">
+            <h4 className="text-[10px] tracking-[0.2em] uppercase text-[#f0c419] mb-4 font-[500]">
               Tienda
             </h4>
             <ul className="space-y-2.5">
@@ -79,10 +89,7 @@ export function Footer() {
                 { href: "/seguimiento", label: "Seguir mi pedido" },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-[#897568] hover:text-[#CEC3AB] transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-[#6a6356] hover:text-[#faf7f1] transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -92,7 +99,7 @@ export function Footer() {
 
           {/* INFORMACIÓN */}
           <div>
-            <h4 className="text-[10px] tracking-[0.2em] uppercase text-[#EAC9C9] mb-4 font-[500]">
+            <h4 className="text-[10px] tracking-[0.2em] uppercase text-[#f0c419] mb-4 font-[500]">
               Información
             </h4>
             <ul className="space-y-2.5">
@@ -103,10 +110,7 @@ export function Footer() {
                 { href: "/devoluciones", label: "Política de devoluciones" },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-[#897568] hover:text-[#CEC3AB] transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-[#6a6356] hover:text-[#faf7f1] transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -115,11 +119,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-[#4D3B2F] mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p className="text-xs text-[#6B5548]">
+        <div className="border-t border-[#2a2a2a] mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p className="text-xs text-[#3a3a3a]">
             © {new Date().getFullYear()} Ricamo. Todos los derechos reservados.
           </p>
-          <p className="text-xs text-[#6B5548]">
+          <p className="text-xs text-[#3a3a3a]">
             Medellín, Colombia 🇨🇴
           </p>
         </div>

@@ -1,28 +1,35 @@
 @import "tailwindcss";
 
-/* ── PALETA MAR BOUTIQUE ─────────────────────────────────── */
+/* ── PALETA RICAMO ───────────────────────────────────────── */
 @theme {
   /* Colores de marca */
-  --color-ivory:       #F3EDE0;
-  --color-sand:        #CEC3AB;
-  --color-taupe:       #897568;
-  --color-espresso:    #3D2B1F;
-  --color-dusty-rose:  #B5888A;
-  --color-blush:       #EAC9C9;
+  --color-cream:       #faf7f1;
+  --color-cream-2:     #f1ebd9;
+  --color-cream-3:     #e8e0c8;
+  --color-ink:         #0e0e0e;
+  --color-ink-2:       #2a2a2a;
+  --color-ink-3:       #6a6356;
+  --color-gold:        #f0c419;
+  --color-gold-deep:   #c99b00;
+  --color-gold-soft:   #fff3b0;
+  --color-terra:       #b85539;
+  --color-sand:        #c8b8a0;
+  --color-paper:       #fffdf6;
 
   /* Alias semánticos */
-  --color-background:  #F3EDE0;
-  --color-foreground:  #3D2B1F;
-  --color-primary:     #EAC9C9;
-  --color-primary-fg:  #3D2B1F;
-  --color-accent:      #B5888A;
-  --color-muted:       #CEC3AB;
-  --color-muted-fg:    #897568;
-  --color-border:      #DDD5C4;
+  --color-background:  #faf7f1;
+  --color-foreground:  #0e0e0e;
+  --color-primary:     #f0c419;
+  --color-primary-fg:  #0e0e0e;
+  --color-accent:      #b85539;
+  --color-muted:       #e8e0c8;
+  --color-muted-fg:    #6a6356;
+  --color-border:      #d8cfbb;
 
-  /* Tipografía — variables inyectadas por next/font/google en layout.tsx */
-  --font-display: var(--font-playfair), Georgia, serif;
-  --font-sans:    var(--font-dm-sans), system-ui, sans-serif;
+  /* Tipografía */
+  --font-display: var(--font-instrument), 'Times New Roman', serif;
+  --font-sans:    var(--font-caveat), system-ui, sans-serif;
+  --font-body:    var(--font-dm-sans), system-ui, sans-serif;
 
   /* Radios */
   --radius-sm:  4px;
@@ -30,9 +37,9 @@
   --radius-lg:  16px;
   --radius-full: 9999px;
 
-  /* Sombras suaves */
-  --shadow-card: 0 2px 16px rgba(61,43,31,0.07);
-  --shadow-modal: 0 8px 40px rgba(61,43,31,0.14);
+  /* Sombras */
+  --shadow-card:  0 2px 16px rgba(14,14,14,0.07);
+  --shadow-modal: 0 8px 40px rgba(14,14,14,0.14);
 }
 
 /* ── RESET Y BASE ────────────────────────────────────────── */
@@ -49,7 +56,7 @@ html {
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
   min-height: 100vh;
@@ -62,24 +69,31 @@ h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 400;
   line-height: 1.15;
-  color: var(--color-espresso);
+  color: var(--color-ink);
 }
 
-/* Display italic para hero y nombre de marca */
-.font-display       { font-family: var(--font-display); }
+.font-display        { font-family: var(--font-display); }
 .font-display-italic { font-family: var(--font-display); font-style: italic; }
+.font-brand          { font-family: var(--font-caveat), cursive; }
 
 /* ── SCROLLBAR CUSTOM ───────────────────────────────────── */
 ::-webkit-scrollbar        { width: 6px; height: 6px; }
-::-webkit-scrollbar-track  { background: var(--color-ivory); }
+::-webkit-scrollbar-track  { background: var(--color-cream); }
 ::-webkit-scrollbar-thumb  { background: var(--color-sand); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-taupe); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-3); }
 
 /* ── SELECTION ──────────────────────────────────────────── */
 ::selection {
-  background-color: var(--color-blush);
-  color: var(--color-espresso);
+  background-color: var(--color-gold);
+  color: var(--color-ink);
 }
+
+/* ── MARQUEE ─────────────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee 30s linear infinite; }
 
 /* ── ANIMACIONES ─────────────────────────────────────────── */
 @keyframes fadeUp {

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import { Instrument_Serif, DM_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400"],
   style: ["normal", "italic"],
-  variable: "--font-playfair",
+  variable: "--font-instrument",
   display: "swap",
 });
 
@@ -17,9 +17,16 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-caveat",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "Ricamo — Camisetas para festivales y eventos de Colombia",
+    default: "Ricamo — lo creas, lo llevas",
     template: "%s | Ricamo",
   },
   description:
@@ -38,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={`h-full ${playfair.variable} ${dmSans.variable}`}>
+    <html lang="es" className={`h-full ${instrumentSerif.variable} ${dmSans.variable} ${caveat.variable}`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
