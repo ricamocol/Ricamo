@@ -381,57 +381,136 @@ export async function sendOrderStatusEmail(order: any, newStatus: string) {
 // ══════════════════════════════════════════════════════════════════
 
 // 5. Nueva solicitud del configurador → María José (admin)
-export async function sendNewConfiguratorRequestEmail(order: any) {
+interface ConfiguradorAdminParams {
+  orderNumber: string;
+  orderId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  modeloCamisa: string;
+  colorCamisa: string;
+  designName?: string;
+  textoDiseno?: string;
+  fuenteTexto?: string;
+  colorTexto?: string;
+  precioBase: number;
+}
+
+export async function sendNewConfiguratorRequestEmail(p: ConfiguradorAdminParams) {
   if (!ADMIN_EMAILS.length) return;
-  const adminUrl = `${SITE_URL}/admin/pedidos/${order.id}`;
+  const adminUrl = `${SITE_URL}/admin/pedidos/${p.orderId}`;
+
+  const detailRows: [string, string][] = [
+    ["Modelo", p.modeloCamisa],
+    ["Color prenda", p.colorCamisa],
+    ...(p.designName ? [["Diseño base", p.designName] as [string, string]] : []),
+    ...(p.textoDiseno ? [["Texto", p.textoDiseno] as [string, string]] : []),
+    ...(p.fuenteTexto ? [["Fuente", p.fuenteTexto] as [string, string]] : []),
+    ...(p.colorTexto ? [["Color texto", p.colorTexto] as [string, string]] : []),
+    ["Precio base", formatCOP(p.precioBase)],
+  ];
+
+  const detailsTable = `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-bottom:16px;">
+      ${detailRows.map(([k, v]) => `
+        <tr>
+          <td style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:${C.ink3};padding:6px 0;width:120px;vertical-align:top;">${k}</td>
+          <td style="font-family:Arial,sans-serif;font-size:13px;color:${C.ink};padding:6px 0 6px 12px;vertical-align:top;">${v}</td>
+        </tr>
+      `).join("")}
+    </table>
+  `;
 
   const content = `
     ${subheading("Configurador — Flujo B")}
     ${heading("Nueva solicitud de diseño")}
-    ${orderHeader(order.order_number, "Pendiente aprobación", C.terra)}
+    ${orderHeader(p.orderNumber, "Pendiente aprobación", C.terra)}
     ${label("Cliente")}
-    ${value(order.shipping_name)}
+    ${value(p.customerName)}
     <p style="font-family:Arial,sans-serif;font-size:13px;color:${C.ink3};margin:0 0 16px;">
-      <a href="mailto:${order.shipping_email}" style="color:${C.terra};">${order.shipping_email}</a>&nbsp;·&nbsp;${order.shipping_phone}
+      <a href="mailto:${p.customerEmail}" style="color:${C.terra};">${p.customerEmail}</a>&nbsp;·&nbsp;${p.customerPhone}
     </p>
     ${divider()}
-    ${alertBox(`El cliente usó el configurador para crear un diseño personalizado. Debes revisarlo y aprobarlo o pedir ajustes.`)}
+    ${label("Detalles del diseño")}
+    ${detailsTable}
+    ${divider()}
+    ${alertBox("Debes revisar el diseño y aprobarlo o solicitar ajustes al cliente.")}
     ${cta("Revisar diseño en el admin", adminUrl)}
   `;
 
   return getResend().emails.send({
     from: FROM,
     to: ADMIN_EMAILS,
-    subject: `[Configurador] Nueva solicitud — ${order.order_number}`,
-    html: emailBase(`Nueva solicitud de diseño de ${order.shipping_name}.`, content),
+    subject: `[Configurador] ${p.customerName} — ${p.orderNumber}`,
+    html: emailBase(`Nueva solicitud de diseño de ${p.customerName}.`, content),
   });
 }
 
 // 6. Nueva solicitud de cotización → María José (admin)
-export async function sendNewCotizacionAdminEmail(order: any) {
+interface CotizacionAdminParams {
+  orderNumber: string;
+  orderId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  description: string;
+  tipoPrenda: string;
+  colorBase: string;
+  tallas: string;
+  cantidad: number;
+  evento?: string;
+  attachmentCount: number;
+}
+
+export async function sendNewCotizacionAdminEmail(p: CotizacionAdminParams) {
   if (!ADMIN_EMAILS.length) return;
-  const adminUrl = `${SITE_URL}/admin/cotizaciones/${order.id}`;
+  const adminUrl = `${SITE_URL}/admin/cotizaciones/${p.orderId}`;
+
+  const detailRows = [
+    ["Prenda", p.tipoPrenda],
+    ["Color base", p.colorBase],
+    ["Tallas", p.tallas],
+    ["Cantidad", String(p.cantidad)],
+    ...(p.evento ? [["Evento", p.evento] as [string, string]] : []),
+    ["Archivos adjuntos", p.attachmentCount > 0 ? `${p.attachmentCount} archivo(s)` : "Ninguno"],
+  ];
+
+  const detailsTable = `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-bottom:16px;">
+      ${detailRows.map(([k, v]) => `
+        <tr>
+          <td style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:${C.ink3};padding:6px 0;width:120px;vertical-align:top;">${k}</td>
+          <td style="font-family:Arial,sans-serif;font-size:13px;color:${C.ink};padding:6px 0 6px 12px;vertical-align:top;">${v}</td>
+        </tr>
+      `).join("")}
+    </table>
+  `;
 
   const content = `
     ${subheading("Cotización — Flujo C")}
     ${heading("Nueva solicitud de cotización")}
-    ${orderHeader(order.order_number, "Cotización pendiente", C.terra)}
+    ${orderHeader(p.orderNumber, "Cotización pendiente", C.terra)}
     ${label("Cliente")}
-    ${value(order.shipping_name)}
+    ${value(p.customerName)}
     <p style="font-family:Arial,sans-serif;font-size:13px;color:${C.ink3};margin:0 0 16px;">
-      <a href="mailto:${order.shipping_email}" style="color:${C.terra};">${order.shipping_email}</a>&nbsp;·&nbsp;${order.shipping_phone}
+      <a href="mailto:${p.customerEmail}" style="color:${C.terra};">${p.customerEmail}</a>&nbsp;·&nbsp;${p.customerPhone}
     </p>
-    ${order.notes ? `${divider()}${label("Descripción de la idea")}${bodyText(order.notes)}` : ""}
     ${divider()}
-    ${alertBox(`El cliente envió una solicitud de cotización manual. Debes cotizar el precio y generar el link de pago.`)}
+    ${label("Detalles del pedido")}
+    ${detailsTable}
+    ${divider()}
+    ${label("Descripción del diseño")}
+    ${bodyText(p.description)}
+    ${divider()}
+    ${alertBox("Debes cotizar el precio y generar el link de pago una vez tengas la propuesta lista.")}
     ${cta("Cotizar en el admin", adminUrl)}
   `;
 
   return getResend().emails.send({
     from: FROM,
     to: ADMIN_EMAILS,
-    subject: `[Cotización] Nueva solicitud — ${order.order_number}`,
-    html: emailBase(`Nueva cotización de ${order.shipping_name}.`, content),
+    subject: `[Cotización] ${p.customerName} — ${p.orderNumber}`,
+    html: emailBase(`Nueva cotización de ${p.customerName}: ${p.tipoPrenda} × ${p.cantidad}.`, content),
   });
 }
 
