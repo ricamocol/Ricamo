@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ShoppingBag, Heart, User, Menu, X } from "lucide-react";
@@ -14,19 +15,6 @@ const NAV_LINKS = [
   { href: "/cotiza", label: "Cotiza" },
   { href: "/maria-jose", label: "María José" },
 ];
-
-function SmileyLogo({ size = 28, color = "currentColor" }: { size?: number; color?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M25 4 C13.4 4.8 4.8 13.4 4 25 C3.2 36.6 11.8 46.4 23.4 47.8 C35 49.2 46 41.2 47.8 29.6 C49.6 18 41.8 6.8 30.2 4.4 C28.5 4.1 26.8 3.9 25 4Z" stroke={color} strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-      <circle cx="18" cy="22" r="2.2" fill={color}/>
-      <circle cx="32" cy="22" r="2.2" fill={color}/>
-      <path d="M16 31 Q25 39.5 34 31" stroke={color} strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-      <path d="M20.5 18 L21.5 16" stroke={color} strokeWidth="1.8" strokeLinecap="round"/>
-      <path d="M23 17.5 L24 15.5" stroke={color} strokeWidth="1.8" strokeLinecap="round"/>
-    </svg>
-  );
-}
 
 export function Navbar() {
   const pathname = usePathname();
@@ -56,9 +44,9 @@ export function Navbar() {
         <div className="flex marquee-track whitespace-nowrap">
           {Array.from({ length: 8 }).map((_, i) => (
             <span key={i} className="mx-8 flex items-center gap-4">
-              <SmileyLogo size={12} color="#f0c419" />
+              <Image src="/logos/smiley-yellow.png" alt="" width={14} height={14} className="inline-block" />
               <span>Camisetas para festivales y eventos de Colombia</span>
-              <SmileyLogo size={12} color="#f0c419" />
+              <Image src="/logos/smiley-yellow.png" alt="" width={14} height={14} className="inline-block" />
               <span>lo creas, lo llevas</span>
             </span>
           ))}
@@ -89,15 +77,16 @@ export function Navbar() {
           {/* LOGO — centro */}
           <Link
             href="/"
-            className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2"
+            className="absolute left-1/2 -translate-x-1/2"
           >
-            <SmileyLogo size={26} color="#0e0e0e" />
-            <span
-              className="text-[26px] text-[#0e0e0e] leading-none select-none"
-              style={{ fontFamily: "'Caveat', cursive", fontWeight: 600 }}
-            >
-              Ricamo
-            </span>
+            <Image
+              src="/logos/logo-black.png"
+              alt="Ricamo"
+              width={130}
+              height={44}
+              className="h-11 w-auto"
+              priority
+            />
           </Link>
 
           {/* NAV LINKS — derecha (desktop) */}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const SOCIAL = [
   {
@@ -36,16 +37,14 @@ export function Footer() {
 
       {/* BRAND BLOCK */}
       <div className="border-b border-[#2a2a2a] py-14 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-4">
-          <span
-            className="text-[#f0c419] text-[64px] leading-none select-none"
-            style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
-          >
-            Ricamo
-          </span>
-          <p className="text-[#6a6356] text-sm tracking-[0.2em] uppercase">
-            lo creas, lo llevas
-          </p>
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+          <Image
+            src="/logos/logo-yellow.png"
+            alt="Ricamo — lo creas, lo llevas"
+            width={340}
+            height={150}
+            className="h-28 w-auto"
+          />
         </div>
       </div>
 

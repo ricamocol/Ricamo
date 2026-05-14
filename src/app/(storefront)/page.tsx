@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { createServiceClient } from "@/lib/supabase/server";
 import { ProductCard } from "@/components/storefront/ProductCard";
@@ -72,25 +73,15 @@ export default async function HomePage() {
             {/* BLOQUE AMARILLO DECORATIVO */}
             <div className="hidden md:flex items-center justify-center">
               <div className="relative w-[420px] h-[480px] bg-[#f0c419]">
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  {/* Smiley grande */}
-                  <svg width="160" height="160" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M25 4 C13.4 4.8 4.8 13.4 4 25 C3.2 36.6 11.8 46.4 23.4 47.8 C35 49.2 46 41.2 47.8 29.6 C49.6 18 41.8 6.8 30.2 4.4 C28.5 4.1 26.8 3.9 25 4Z" stroke="#0e0e0e" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-                    <circle cx="18" cy="22" r="2.2" fill="#0e0e0e"/>
-                    <circle cx="32" cy="22" r="2.2" fill="#0e0e0e"/>
-                    <path d="M16 31 Q25 39.5 34 31" stroke="#0e0e0e" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-                    <path d="M20.5 18 L21.5 16" stroke="#0e0e0e" strokeWidth="1.8" strokeLinecap="round"/>
-                    <path d="M23 17.5 L24 15.5" stroke="#0e0e0e" strokeWidth="1.8" strokeLinecap="round"/>
-                  </svg>
-                  <span
-                    className="text-[#0e0e0e] text-5xl leading-none"
-                    style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
-                  >
-                    Ricamo
-                  </span>
-                  <span className="text-[#0e0e0e]/60 text-sm tracking-[0.15em] uppercase">
-                    lo creas, lo llevas
-                  </span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-12">
+                  <Image
+                    src="/logos/logo-black.png"
+                    alt="Ricamo — lo creas, lo llevas"
+                    width={320}
+                    height={140}
+                    className="w-full h-auto"
+                    priority
+                  />
                 </div>
                 {/* Detalles decorativos */}
                 <div className="absolute bottom-6 right-6 w-16 h-16 border border-[#0e0e0e]/20 rounded-full" />
@@ -235,15 +226,14 @@ export default async function HomePage() {
               </div>
             </div>
             <div className="hidden md:flex justify-center">
-              <div className="w-72 h-72 bg-[#0e0e0e] flex items-center justify-center">
-                <svg width="120" height="120" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M25 4 C13.4 4.8 4.8 13.4 4 25 C3.2 36.6 11.8 46.4 23.4 47.8 C35 49.2 46 41.2 47.8 29.6 C49.6 18 41.8 6.8 30.2 4.4 C28.5 4.1 26.8 3.9 25 4Z" stroke="#f0c419" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-                  <circle cx="18" cy="22" r="2.2" fill="#f0c419"/>
-                  <circle cx="32" cy="22" r="2.2" fill="#f0c419"/>
-                  <path d="M16 31 Q25 39.5 34 31" stroke="#f0c419" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-                  <path d="M20.5 18 L21.5 16" stroke="#f0c419" strokeWidth="1.8" strokeLinecap="round"/>
-                  <path d="M23 17.5 L24 15.5" stroke="#f0c419" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
+              <div className="w-72 h-72 bg-[#0e0e0e] flex items-center justify-center p-10">
+                <Image
+                  src="/logos/smiley-yellow.png"
+                  alt=""
+                  width={200}
+                  height={200}
+                  className="w-full h-auto"
+                />
               </div>
             </div>
           </div>
