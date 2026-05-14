@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 import { createServiceClient } from "@/lib/supabase/server";
 import { sendOrderConfirmationEmail, sendNewOrderAdminEmail } from "@/lib/email/templates";
+import { getCourier } from "@/lib/shipping";
 import type { CartItem, CheckoutForm } from "@/types";
 
 interface CheckoutPayload {
@@ -61,8 +62,11 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Crear pedido en estado pending_payment
-    const orderNumber = `MB-${Date.now().toString(36).toUpperCase()}`;
-    const wompiReference = `MAR-${orderNumber}`;
+    // Recalcular courier en servidor para evitar manipulación — RB-CHK-04
+    const courierResult = getCourier(form.city);
+
+    const orderNumber = `RIC-${Date.now().toString(36).toUpperCase()}`;
+    const wompiReference = `RIC-${orderNumber}`;
 
     const { data: order, error: orderError } = await supabase
       .from("orders")
@@ -78,8 +82,9 @@ export async function POST(req: NextRequest) {
         shipping_department: form.department,
         subtotal,
         discount_amount: discountAmount,
-        shipping_cost: shippingCost,
-        total,
+        shipping_cost: courierResult.cost,
+        courier: courierResult.courier,
+        total: Math.max(0, subtotal - discountAmount + courierResult.cost),
         wompi_reference: wompiReference,
         cart_session_id: sessionId,
         terms_accepted: form.terms_accepted,
@@ -115,8 +120,9 @@ export async function POST(req: NextRequest) {
       notes: "Pedido creado — esperando confirmación de Wompi",
     });
 
-    // 5. Construir datos de Wompi
-    const amountInCents = Math.round(total * 100);
+    // 5. Construir datos de Wompi con el total validado en servidor
+    const validatedTotal = Math.max(0, subtotal - discountAmount + courierResult.cost);
+    const amountInCents = Math.round(validatedTotal * 100);
     const currency = "COP";
     const integritySecret = process.env.WOMPI_INTEGRITY_SECRET!;
     const integritySignature = buildWompiSignature(
