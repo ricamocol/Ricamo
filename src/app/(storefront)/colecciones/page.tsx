@@ -59,7 +59,7 @@ export default async function ColeccionesPage() {
           {items.map((col) => (
             <Link
               key={col.id}
-              href={`/coleccion/${col.slug}`}
+              href={`/evento/${col.slug}`}
               className="group block relative overflow-hidden"
             >
               {/* Imagen / fondo */}
