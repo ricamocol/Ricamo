@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await req.json();
-  const service = await createServiceClient();
+  const service = createServiceClient();
 
   const slug = body.slug || slugify(body.name);
 

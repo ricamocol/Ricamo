@@ -7,7 +7,7 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function EditarProductoPage({ params }: Props) {
   const { id } = await params;
-  const service = await createServiceClient();
+  const service = createServiceClient();
 
   const [
     { data: product },

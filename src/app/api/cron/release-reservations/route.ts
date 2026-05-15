@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = await createServiceClient();
+  const supabase = createServiceClient();
   const { error } = await supabase.rpc("release_expired_reservations");
 
   if (error) {

@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const path = `products/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-  const service = await createServiceClient();
+  const service = createServiceClient();
   const { error } = await service.storage
     .from("product-images")
     .upload(path, file, { contentType: file.type, upsert: false });

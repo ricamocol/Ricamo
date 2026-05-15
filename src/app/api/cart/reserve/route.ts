@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
     }
 
-    const supabase = await createServiceClient();
+    const supabase = createServiceClient();
 
     // Check variant inventory mode — RB-CHK-01
     const { data: variant } = await supabase

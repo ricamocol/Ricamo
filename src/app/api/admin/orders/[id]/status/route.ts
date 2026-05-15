@@ -30,7 +30,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const { status, trackingNumber, courier } = await req.json();
 
-  const service = await createServiceClient();
+  const service = createServiceClient();
 
   // Obtener pedido actual
   const { data: order } = await service.from("orders").select("*").eq("id", id).single();

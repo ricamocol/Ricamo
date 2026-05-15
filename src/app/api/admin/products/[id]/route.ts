@@ -11,7 +11,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await req.json();
-  const service = await createServiceClient();
+  const service = createServiceClient();
 
   const slug = body.slug || slugify(body.name);
 
@@ -99,7 +99,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  const service = await createServiceClient();
+  const service = createServiceClient();
   await service.from("products").update({ status: "archived" }).eq("id", id);
 
   return NextResponse.json({ ok: true });

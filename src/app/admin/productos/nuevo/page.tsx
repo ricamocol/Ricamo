@@ -2,7 +2,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { ProductForm } from "@/components/admin/ProductForm";
 
 export default async function NuevoProductoPage() {
-  const service = await createServiceClient();
+  const service = createServiceClient();
 
   const [{ data: categories }, { data: collections }, { data: occasions }] =
     await Promise.all([

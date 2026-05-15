@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   }
 
   // --- Import ---
-  const service = await createServiceClient();
+  const service = createServiceClient();
   const results: { nombre: string; status: "created" | "error"; message?: string }[] = [];
 
   // Pre-fetch all taxonomy to resolve names → ids
