@@ -1,23 +1,63 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Search, Package, MapPin, Truck, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Search, Package, MapPin, Truck, CheckCircle, XCircle, Clock, Scissors } from "lucide-react";
 import { createServiceClient } from "@/lib/supabase/server";
 import { formatCOP, formatDate } from "@/lib/utils/format";
 
 export const metadata: Metadata = { title: "Seguimiento de pedido" };
 
-const STATUS_STEPS = [
+// Flujo A pre-stock: pending_payment → paid → preparing → shipped → delivered
+const STEPS_PRESTOCK = [
   { key: "pending_payment", label: "Pendiente de pago", icon: Clock },
   { key: "paid", label: "Pago confirmado", icon: CheckCircle },
-  { key: "preparing", label: "En preparación", icon: Package },
+  { key: "preparing", label: "Empacando", icon: Package },
   { key: "shipped", label: "En camino", icon: Truck },
   { key: "delivered", label: "Entregado", icon: CheckCircle },
 ];
+const ORDER_PRESTOCK = ["pending_payment", "paid", "preparing", "shipped", "delivered"];
 
-const STATUS_ORDER = ["pending_payment", "paid", "preparing", "shipped", "delivered"];
+// Flujo A bajo demanda / B / C: paid → en_produccion → shipped → delivered
+const STEPS_PRODUCCION = [
+  { key: "paid", label: "Pago confirmado", icon: CheckCircle },
+  { key: "en_produccion", label: "En producción", icon: Scissors },
+  { key: "shipped", label: "En camino", icon: Truck },
+  { key: "delivered", label: "Entregado", icon: CheckCircle },
+];
+const ORDER_PRODUCCION = ["paid", "en_produccion", "shipped", "delivered"];
 
-function getStepIndex(status: string) {
-  return STATUS_ORDER.indexOf(status);
+// Estados B/C previos al pago — mapa de etiqueta para mostrar en card
+const BC_STATUS_LABELS: Record<string, { label: string; detail: string }> = {
+  cotizacion_pendiente: {
+    label: "Cotización en proceso",
+    detail: "Estamos revisando tu solicitud y pronto te enviaremos una cotización.",
+  },
+  pendiente_aprobacion: {
+    label: "Revisando tu diseño",
+    detail: "Tu diseño está siendo revisado. Te notificaremos cuando esté listo.",
+  },
+  en_ajustes: {
+    label: "Diseño en ajustes",
+    detail: "Se solicitaron ajustes. Revisa tu correo para más detalles.",
+  },
+  aprobado_pendiente_pago: {
+    label: "¡Aprobado! Lista para pagar",
+    detail: "Tu diseño fue aprobado. Usa el enlace enviado a tu correo para completar el pago.",
+  },
+  rechazado: {
+    label: "No pudimos continuar",
+    detail: "Tu solicitud no pudo ser procesada. Revisa tu correo para conocer el motivo.",
+  },
+};
+
+function pickSteps(status: string) {
+  if (ORDER_PRESTOCK.includes(status) && status === "preparing") {
+    return { steps: STEPS_PRESTOCK, order: ORDER_PRESTOCK };
+  }
+  if (ORDER_PRODUCCION.includes(status)) {
+    return { steps: STEPS_PRODUCCION, order: ORDER_PRODUCCION };
+  }
+  // Default: pre-stock path (covers pending_payment, paid before knowing the path)
+  return { steps: STEPS_PRESTOCK, order: ORDER_PRESTOCK };
 }
 
 interface Props {
@@ -48,7 +88,12 @@ export default async function SeguimientoPage({ searchParams }: Props) {
   }
 
   const isCancelled = order?.status === "cancelled";
-  const currentStep = order ? getStepIndex(order.status) : -1;
+  const isRechazado = order?.status === "rechazado";
+  const bcStatus = order && BC_STATUS_LABELS[order.status] ? order.status : null;
+
+  const { steps: STATUS_STEPS, order: STATUS_ORDER } =
+    order ? pickSteps(order.status) : { steps: STEPS_PRESTOCK, order: ORDER_PRESTOCK };
+  const currentStep = order ? STATUS_ORDER.indexOf(order.status) : -1;
 
   return (
     <div className="min-h-screen bg-[#F3EDE0]">
@@ -142,14 +187,42 @@ export default async function SeguimientoPage({ searchParams }: Props) {
                 Estado del pedido
               </p>
 
-              {isCancelled ? (
+              {isCancelled || isRechazado ? (
                 <div className="flex items-center gap-3 py-3 text-[#B5888A]">
                   <XCircle size={20} />
                   <div>
-                    <p className="text-sm font-[600]">Pedido cancelado</p>
-                    <p className="text-xs text-[#897568] mt-0.5">
-                      Este pedido fue cancelado. Si tienes preguntas escríbenos a hola@ricamo.co
+                    <p className="text-sm font-[600]">
+                      {isCancelled ? "Pedido cancelado" : "No pudimos continuar"}
                     </p>
+                    <p className="text-xs text-[#897568] mt-0.5">
+                      {isCancelled
+                        ? "Este pedido fue cancelado. Si tienes preguntas escríbenos a hola@ricamo.co"
+                        : "Tu solicitud no pudo ser procesada. Revisa tu correo para conocer el motivo."}
+                    </p>
+                  </div>
+                </div>
+              ) : bcStatus ? (
+                <div className="py-3">
+                  <div className="flex items-start gap-3">
+                    <Clock size={20} className="text-[#f0c419] shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-[600] text-[#3D2B1F]">
+                        {BC_STATUS_LABELS[bcStatus].label}
+                      </p>
+                      <p className="text-xs text-[#897568] mt-1">
+                        {BC_STATUS_LABELS[bcStatus].detail}
+                      </p>
+                      {bcStatus === "aprobado_pendiente_pago" && order?.wompi_link_url && (
+                        <a
+                          href={order.wompi_link_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block mt-3 px-6 py-2.5 bg-[#f0c419] text-[#0e0e0e] text-[11px] tracking-[0.18em] uppercase font-[700] hover:bg-[#e0b410] transition-colors"
+                        >
+                          Pagar ahora →
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               ) : (

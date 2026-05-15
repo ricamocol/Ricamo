@@ -12,13 +12,22 @@ interface Props {
 const STATUS_LABELS: Record<string, string> = {
   pending_payment: "Pendiente de pago",
   paid: "Pagado ✓",
-  preparing: "En preparación",
+  en_produccion: "En producción",
+  preparing: "Empacando",
   shipped: "Enviado",
   delivered: "Entregado",
   cancelled: "Cancelado",
+  cotizacion_pendiente: "Cotización en proceso",
+  pendiente_aprobacion: "Revisando diseño",
+  en_ajustes: "En ajustes",
+  aprobado_pendiente_pago: "Aprobado",
+  rechazado: "No aprobado",
 };
 
-const STATUS_STEPS = ["paid", "preparing", "shipped", "delivered"];
+// Pre-stock: paid → preparing → shipped → delivered
+// Bajo demanda / B / C: paid → en_produccion → shipped → delivered
+const STEPS_PRESTOCK = ["paid", "preparing", "shipped", "delivered"];
+const STEPS_PRODUCCION = ["paid", "en_produccion", "shipped", "delivered"];
 
 export default async function ConfirmacionPage({ params }: Props) {
   const { orderId } = await params;
@@ -32,12 +41,17 @@ export default async function ConfirmacionPage({ params }: Props) {
 
   if (!order) notFound();
 
+  const usesProduccion =
+    order.status === "en_produccion" ||
+    order.flow === "B" ||
+    order.flow === "C";
+  const STATUS_STEPS = usesProduccion ? STEPS_PRODUCCION : STEPS_PRESTOCK;
   const currentStep = STATUS_STEPS.indexOf(order.status);
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center">
       {/* Icono de estado */}
-      {order.status === "paid" || order.status === "preparing" || order.status === "shipped" || order.status === "delivered" ? (
+      {["paid", "en_produccion", "preparing", "shipped", "delivered"].includes(order.status) ? (
         <CheckCircle className="mx-auto mb-6 text-[#B5888A]" size={56} strokeWidth={1} />
       ) : (
         <Package className="mx-auto mb-6 text-[#CEC3AB]" size={56} strokeWidth={1} />
@@ -47,7 +61,9 @@ export default async function ConfirmacionPage({ params }: Props) {
         className="text-4xl text-[#3D2B1F] mb-2"
         style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
       >
-        {order.status === "paid" ? "¡Pedido confirmado!" : "Tu pedido"}
+        {order.status === "paid" || order.status === "en_produccion"
+          ? "¡Pedido confirmado!"
+          : "Tu pedido"}
       </h1>
       <p className="text-[#897568] text-sm mb-2">
         Pedido <span className="font-[600] text-[#3D2B1F]">{order.order_number}</span>

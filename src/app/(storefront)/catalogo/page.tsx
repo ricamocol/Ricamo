@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { CatalogFilters } from "@/components/storefront/CatalogFilters";
 import { CatalogSortSelect } from "@/components/storefront/CatalogSortSelect";
+import { getProductDeliveryMode, getDeliveryMode } from "@/types";
 import type { Product } from "@/types";
 
 interface SearchParams {
@@ -62,18 +63,26 @@ async function getProducts(filters: SearchParams): Promise<Product[]> {
   const { data } = await query.limit(48);
   if (!data) return [];
 
-  return data.map((p: any) => ({
-    ...p,
-    categories: p.categories?.map((r: any) => r.category) ?? [],
-    collections: p.collections?.map((r: any) => r.collection) ?? [],
-    occasions: p.occasions?.map((r: any) => r.occasion) ?? [],
-    variants: p.variants ?? [],
-    is_sold_out:
-      !p.variants?.length ||
-      p.variants.every((v: any) => v.stock - v.reserved <= 0),
-    is_on_sale: !!p.compare_price && p.compare_price > p.base_price,
-    effective_price: p.base_price,
-  }));
+  return data.map((p: any) => {
+    const variants = (p.variants ?? []).map((v: any) => ({
+      ...v,
+      available_stock: Math.max(0, v.stock - v.reserved),
+    }));
+    const deliveryMode = getProductDeliveryMode(variants);
+    const onDemandVariant = variants.find((v: any) => getDeliveryMode(v) === "on_demand");
+    return {
+      ...p,
+      categories: p.categories?.map((r: any) => r.category) ?? [],
+      collections: p.collections?.map((r: any) => r.collection) ?? [],
+      occasions: p.occasions?.map((r: any) => r.occasion) ?? [],
+      variants,
+      delivery_mode: deliveryMode,
+      tiempo_produccion_dias: onDemandVariant?.tiempo_produccion_dias ?? 3,
+      is_sold_out: deliveryMode === "sold_out",
+      is_on_sale: !!p.compare_price && p.compare_price > p.base_price,
+      effective_price: p.base_price,
+    };
+  });
 }
 
 async function getFilterOptions() {

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ProductGallery } from "@/components/storefront/ProductGallery";
 import { VariantSelector } from "@/components/storefront/VariantSelector";
 import { formatCOP, discountPercent } from "@/lib/utils/format";
+import { getProductDeliveryMode, getDeliveryMode } from "@/types";
 import type { Product } from "@/types";
 
 interface Props {
@@ -26,16 +27,20 @@ async function getProduct(slug: string): Promise<Product | null> {
 
   if (!data) return null;
 
-  const variants = data.variants ?? [];
+  const mappedVariants = (data.variants ?? []).map((v: any) => ({
+    ...v,
+    available_stock: Math.max(0, v.stock - v.reserved),
+  }));
+  const deliveryMode = getProductDeliveryMode(mappedVariants);
+  const onDemandVariant = mappedVariants.find((v: any) => getDeliveryMode(v) === "on_demand");
   return {
     ...data,
     categories: data.categories?.map((r: any) => r.category) ?? [],
     collections: data.collections?.map((r: any) => r.collection) ?? [],
-    variants: variants.map((v: any) => ({
-      ...v,
-      available_stock: Math.max(0, v.stock - v.reserved),
-    })),
-    is_sold_out: variants.every((v: any) => v.stock - v.reserved <= 0),
+    variants: mappedVariants,
+    delivery_mode: deliveryMode,
+    tiempo_produccion_dias: onDemandVariant?.tiempo_produccion_dias ?? 3,
+    is_sold_out: deliveryMode === "sold_out",
     is_on_sale: !!data.compare_price && data.compare_price > data.base_price,
     effective_price: data.base_price,
   };

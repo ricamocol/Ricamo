@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, ShoppingBag, AlertCircle } from "lucide-react";
+import { Heart, ShoppingBag, AlertCircle, Clock, Zap } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { useCartStore } from "@/lib/store/cart";
+import { getDeliveryMode } from "@/types";
 import type { Product, ProductVariant } from "@/types";
 
 interface Props {
@@ -49,24 +50,34 @@ export function VariantSelector({ product }: Props) {
   });
 
   const available = selectedVariant
-    ? selectedVariant.available_stock ?? selectedVariant.stock - selectedVariant.reserved
+    ? selectedVariant.available_stock ?? Math.max(0, selectedVariant.stock - selectedVariant.reserved)
     : 0;
 
-  const isSoldOut = product.is_sold_out;
+  const deliveryMode = selectedVariant ? getDeliveryMode(selectedVariant) : null;
+
+  // A variant is sellable if it has pre-stock OR bajo_demanda is enabled (RB-INV)
+  function variantSellable(v: ProductVariant) {
+    const mode = getDeliveryMode(v);
+    return mode === "fast" || mode === "on_demand";
+  }
+
+  // Product is sold out only when no variant is sellable (respects dual inventory)
+  const isSoldOut = variants.length > 0 && variants.every((v) => getDeliveryMode(v) === "sold_out");
+  const variantSellableNow = selectedVariant ? variantSellable(selectedVariant) : false;
   const canAddToCart =
     !isSoldOut &&
     selectedVariant &&
-    available > 0 &&
+    variantSellableNow &&
     (!sizes.length || selectedSize) &&
     (!colors.length || selectedColor);
 
-  // Verificar qué tallas/colores tienen stock dado el otro atributo seleccionado
+  // Verificar qué tallas/colores tienen stock o bajo demanda habilitado
   function sizeHasStock(size: string) {
     return variants.some(
       (v) =>
         v.attributes.talla === size &&
         (!selectedColor || v.attributes.color === selectedColor) &&
-        (v.stock - v.reserved) > 0
+        variantSellable(v)
     );
   }
   function colorHasStock(color: string) {
@@ -74,7 +85,7 @@ export function VariantSelector({ product }: Props) {
       (v) =>
         v.attributes.color === color &&
         (!selectedSize || v.attributes.talla === selectedSize) &&
-        (v.stock - v.reserved) > 0
+        variantSellable(v)
     );
   }
 
@@ -168,8 +179,29 @@ export function VariantSelector({ product }: Props) {
         </div>
       )}
 
+      {/* BADGE DE ENTREGA */}
+      {selectedVariant && deliveryMode && (
+        <div className="flex items-center gap-1.5">
+          {deliveryMode === "fast" && (
+            <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-[500]">
+              <Zap size={9} /> Entrega rápida 1-3 días
+            </span>
+          )}
+          {deliveryMode === "on_demand" && (
+            <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 font-[500]">
+              <Clock size={9} /> Bajo demanda · {selectedVariant.tiempo_produccion_dias ?? 3} días prod. + envío
+            </span>
+          )}
+          {deliveryMode === "sold_out" && (
+            <span className="text-[10px] px-2 py-0.5 bg-gray-50 text-gray-500 border border-gray-200 font-[500]">
+              Agotado
+            </span>
+          )}
+        </div>
+      )}
+
       {/* CANTIDAD */}
-      {!isSoldOut && selectedVariant && available > 0 && (
+      {!isSoldOut && selectedVariant && variantSellableNow && (
         <div>
           <span className="text-[10px] tracking-[0.2em] uppercase text-[#897568] font-[600] block mb-2.5">
             Cantidad
@@ -185,13 +217,17 @@ export function VariantSelector({ product }: Props) {
               {quantity}
             </span>
             <button
-              onClick={() => setQuantity((q) => Math.min(available, q + 1))}
+              onClick={() => {
+                // Pre-stock: cap at available; bajo_demanda: no cap (unlimited on demand)
+                const max = deliveryMode === "fast" ? available : 99;
+                setQuantity((q) => Math.min(max, q + 1));
+              }}
               className="w-10 h-10 flex items-center justify-center text-[#897568] hover:text-[#3D2B1F] text-lg"
             >
               +
             </button>
           </div>
-          {available <= 5 && (
+          {deliveryMode === "fast" && available <= 5 && (
             <p className="text-xs text-[#B5888A] mt-1.5">
               Solo {available} disponibles
             </p>
@@ -201,7 +237,7 @@ export function VariantSelector({ product }: Props) {
 
       {/* BOTONES */}
       <div className="flex flex-col gap-3 pt-2">
-        {isSoldOut ? (
+        {isSoldOut || (selectedVariant && deliveryMode === "sold_out") ? (
           <button
             disabled
             className="w-full py-4 bg-[#CEC3AB] text-[#897568] text-[11px] tracking-[0.2em] uppercase font-[500] cursor-not-allowed"
@@ -239,7 +275,7 @@ export function VariantSelector({ product }: Props) {
       {feedback === "error" && (
         <p className="text-xs text-[#B5888A] flex items-center gap-1.5">
           <AlertCircle size={12} />
-          Sin stock disponible. Intenta de nuevo.
+          No fue posible agregar al carrito. Intenta de nuevo.
         </p>
       )}
     </div>
