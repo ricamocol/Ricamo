@@ -73,15 +73,18 @@ export async function PUT(req: NextRequest, { params }: Params) {
     await service.from("product_variants").delete().eq("product_id", id);
   }
 
-  // Upsert variantes
+  // Upsert variantes (incluye campos de inventario dual Ricamo)
   if (body.variants?.length) {
     await service.from("product_variants").upsert(
       body.variants.map((v: any) => ({
         product_id: id,
         sku: v.sku,
         price: v.price ? Number(v.price) : null,
-        stock: Number(v.stock ?? 0),
+        stock: Number(v.stock_pre_producido ?? v.stock ?? 0),
         attributes: v.attributes,
+        stock_pre_producido: Number(v.stock_pre_producido ?? 0),
+        bajo_demanda_habilitado: v.bajo_demanda_habilitado ?? true,
+        tiempo_produccion_dias: Number(v.tiempo_produccion_dias ?? 3),
       })),
       { onConflict: "sku" }
     );

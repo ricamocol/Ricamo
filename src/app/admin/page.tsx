@@ -8,29 +8,37 @@ async function getDashboardStats() {
   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString();
   const startOfToday = new Date(today.setHours(0, 0, 0, 0)).toISOString();
 
-  const [todayOrders, monthOrders, totalCustomers, lowStock] = await Promise.all([
+  const [todayOrders, monthOrders, totalCustomers, lowStock, pendingBC, pendingPayment] = await Promise.all([
     supabase
       .from("orders")
       .select("id, total, status")
       .gte("created_at", startOfToday)
-      .in("status", ["paid", "preparing", "shipped", "delivered"]),
+      .in("status", ["paid", "preparing", "en_produccion", "shipped", "delivered"]),
     supabase
       .from("orders")
       .select("id, total")
       .gte("created_at", startOfMonth)
-      .in("status", ["paid", "preparing", "shipped", "delivered"]),
+      .in("status", ["paid", "preparing", "en_produccion", "shipped", "delivered"]),
     supabase.from("customers").select("id", { count: "exact", head: true }),
     supabase
       .from("product_variants")
-      .select("id, sku, stock, reserved, product_id, products(name)")
-      .lte("stock", 3)
-      .gt("stock", 0),
+      .select("id, sku, stock_pre_producido, product_id, products(name)")
+      .lte("stock_pre_producido", 3)
+      .gt("stock_pre_producido", 0),
+    supabase
+      .from("orders")
+      .select("id", { count: "exact", head: true })
+      .in("status", ["cotizacion_pendiente", "pendiente_aprobacion", "en_ajustes"]),
+    supabase
+      .from("orders")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "aprobado_pendiente_pago"),
   ]);
 
   const todaySales = (todayOrders.data ?? []).reduce((s, o) => s + o.total, 0);
   const monthSales = (monthOrders.data ?? []).reduce((s, o) => s + o.total, 0);
   const pendingOrders = (todayOrders.data ?? []).filter(
-    (o) => o.status === "paid" || o.status === "preparing"
+    (o) => o.status === "paid" || o.status === "preparing" || o.status === "en_produccion"
   ).length;
 
   return {
@@ -41,6 +49,8 @@ async function getDashboardStats() {
     totalCustomers: totalCustomers.count ?? 0,
     pendingOrders,
     lowStock: lowStock.data ?? [],
+    pendingBC: pendingBC.count ?? 0,
+    pendingPayment: pendingPayment.count ?? 0,
   };
 }
 
@@ -116,6 +126,34 @@ export default async function AdminDashboard() {
         />
       </div>
 
+      {/* Alertas B/C */}
+      {(stats.pendingBC > 0 || stats.pendingPayment > 0) && (
+        <div className="flex gap-3 mb-6 flex-wrap">
+          {stats.pendingBC > 0 && (
+            <a
+              href="/admin/cotizaciones"
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#b85539]/10 border border-[#b85539]/30 text-[#b85539] text-xs font-[500] hover:bg-[#b85539]/15 transition-colors"
+            >
+              <span className="w-5 h-5 rounded-full bg-[#b85539] text-white text-[10px] flex items-center justify-center font-[700]">
+                {stats.pendingBC}
+              </span>
+              {stats.pendingBC === 1 ? "cotización requiere atención" : "cotizaciones requieren atención"} →
+            </a>
+          )}
+          {stats.pendingPayment > 0 && (
+            <a
+              href="/admin/cotizaciones?status=aprobado_pendiente_pago"
+              className="flex items-center gap-2 px-4 py-2.5 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-[500] hover:bg-amber-100 transition-colors"
+            >
+              <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-[10px] flex items-center justify-center font-[700]">
+                {stats.pendingPayment}
+              </span>
+              {stats.pendingPayment === 1 ? "pedido aprobado esperando pago" : "pedidos aprobados esperando pago"} →
+            </a>
+          )}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* PEDIDOS RECIENTES */}
         <div className="lg:col-span-2 bg-white border border-[#DDD5C4] p-6">
@@ -168,7 +206,7 @@ export default async function AdminDashboard() {
                       {v.products?.name ?? v.sku}
                     </p>
                     <p className="text-[10px] text-[#897568]">
-                      {v.sku} · {v.stock} disponibles
+                      {v.sku} · {v.stock_pre_producido} pre-stock
                     </p>
                   </div>
                 </div>

@@ -60,9 +60,12 @@ export async function POST(req: NextRequest) {
         product_id: pid,
         sku: v.sku,
         price: v.price ? Number(v.price) : null,
-        stock: Number(v.stock ?? 0),
+        stock: Number(v.stock_pre_producido ?? v.stock ?? 0),
         reserved: 0,
         attributes: v.attributes,
+        stock_pre_producido: Number(v.stock_pre_producido ?? 0),
+        bajo_demanda_habilitado: v.bajo_demanda_habilitado ?? true,
+        tiempo_produccion_dias: Number(v.tiempo_produccion_dias ?? 3),
       }))
     );
   }

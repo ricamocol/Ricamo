@@ -22,7 +22,7 @@ export default async function EditarProductoPage({ params }: Props) {
          product_categories(category_id),
          product_collections(collection_id),
          product_occasions(occasion_id),
-         product_variants(sku, price, stock, attributes)`
+         product_variants(sku, price, stock, attributes, stock_pre_producido, bajo_demanda_habilitado, tiempo_produccion_dias)`
       )
       .eq("id", id)
       .single(),
@@ -51,6 +51,9 @@ export default async function EditarProductoPage({ params }: Props) {
       attributes: v.attributes,
       stock: v.stock,
       price: v.price,
+      stock_pre_producido: v.stock_pre_producido ?? 0,
+      bajo_demanda_habilitado: v.bajo_demanda_habilitado ?? true,
+      tiempo_produccion_dias: v.tiempo_produccion_dias ?? 3,
     })),
   };
 

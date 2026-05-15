@@ -7,8 +7,11 @@ import { cn } from "@/lib/utils/cn";
 export interface VariantRow {
   sku: string;
   attributes: { talla: string; color: string };
-  stock: number;
+  stock: number;                  // total físico — usado por sistema de reservas
   price: number | null;
+  stock_pre_producido: number;    // unidades listas para envío rápido
+  bajo_demanda_habilitado: boolean;
+  tiempo_produccion_dias: number;
 }
 
 interface Props {
@@ -19,11 +22,20 @@ interface Props {
 
 const TALLAS_DEFAULT = ["XS", "S", "M", "L", "XL", "XXL"];
 
-function generateSKU(name: string, talla: string, color: string): string {
-  const clean = (s: string) =>
-    s.toUpperCase().replace(/\s+/g, "").slice(0, 4);
-  return `${clean(name)}-${clean(talla)}-${clean(color)}`;
+function generateSKU(talla: string, color: string): string {
+  const clean = (s: string) => s.toUpperCase().replace(/\s+/g, "").replace(/[^A-Z0-9]/g, "").slice(0, 4);
+  return `RIC-${clean(talla)}-${clean(color)}`;
 }
+
+const DEFAULT_VARIANT = (talla: string, color: string): VariantRow => ({
+  sku: generateSKU(talla, color),
+  attributes: { talla, color },
+  stock: 0,
+  price: null,
+  stock_pre_producido: 0,
+  bajo_demanda_habilitado: true,
+  tiempo_produccion_dias: 3,
+});
 
 export function VariantManager({ variants, onChange, basePrice }: Props) {
   const [tallas, setTallas] = useState<string[]>([]);
@@ -31,7 +43,6 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
   const [newTalla, setNewTalla] = useState("");
   const [newColor, setNewColor] = useState("");
 
-  // Sync tallas/colores from incoming variants (for edit mode)
   useEffect(() => {
     if (variants.length === 0) return;
     const t = [...new Set(variants.map((v) => v.attributes.talla))];
@@ -47,14 +58,7 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
         const existing = variants.find(
           (v) => v.attributes.talla === t && v.attributes.color === c
         );
-        next.push(
-          existing ?? {
-            sku: generateSKU("MB", t, c),
-            attributes: { talla: t, color: c },
-            stock: 0,
-            price: null,
-          }
-        );
+        next.push(existing ?? DEFAULT_VARIANT(t, c));
       }
     }
     onChange(next);
@@ -91,36 +95,35 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
   function updateVariant(
     talla: string,
     color: string,
-    field: "sku" | "stock" | "price",
-    value: string
+    field: keyof VariantRow,
+    value: string | boolean
   ) {
     const next = variants.map((v) => {
       if (v.attributes.talla !== talla || v.attributes.color !== color) return v;
-      if (field === "sku") return { ...v, sku: value };
-      if (field === "stock") return { ...v, stock: Math.max(0, parseInt(value) || 0) };
-      if (field === "price")
-        return { ...v, price: value === "" ? null : Math.max(0, parseFloat(value) || 0) };
+      if (field === "sku") return { ...v, sku: value as string };
+      if (field === "price") return { ...v, price: value === "" ? null : Math.max(0, parseFloat(value as string) || 0) };
+      if (field === "stock_pre_producido") {
+        const n = Math.max(0, parseInt(value as string) || 0);
+        return { ...v, stock_pre_producido: n, stock: n }; // keep stock in sync
+      }
+      if (field === "bajo_demanda_habilitado") return { ...v, bajo_demanda_habilitado: value as boolean };
+      if (field === "tiempo_produccion_dias") return { ...v, tiempo_produccion_dias: Math.max(1, parseInt(value as string) || 1) };
       return v;
     });
     onChange(next);
   }
 
   function getVariant(talla: string, color: string): VariantRow | undefined {
-    return variants.find(
-      (v) => v.attributes.talla === talla && v.attributes.color === color
-    );
+    return variants.find((v) => v.attributes.talla === talla && v.attributes.color === color);
   }
 
-  const inputCls =
-    "w-full border border-[#DDD5C4] bg-white px-2 py-1 text-xs text-[#3D2B1F] focus:outline-none focus:border-[#897568]";
+  const inputCls = "w-full border border-[#DDD5C4] bg-white px-2 py-1 text-xs text-[#3D2B1F] focus:outline-none focus:border-[#897568]";
 
   return (
     <div className="space-y-5">
       {/* Tallas */}
       <div>
-        <p className="text-[10px] tracking-[0.18em] uppercase text-[#897568] font-[600] mb-2">
-          Tallas disponibles
-        </p>
+        <p className="text-[10px] tracking-[0.18em] uppercase text-[#897568] font-[600] mb-2">Tallas</p>
         <div className="flex flex-wrap gap-1.5 mb-2">
           {TALLAS_DEFAULT.map((t) => (
             <button
@@ -142,17 +145,11 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
           <input
             value={newTalla}
             onChange={(e) => setNewTalla(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") { e.preventDefault(); addTalla(newTalla); setNewTalla(""); }
-            }}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTalla(newTalla); setNewTalla(""); } }}
             placeholder="Otra talla…"
-            className="border border-[#DDD5C4] px-2 py-1 text-xs text-[#3D2B1F] focus:outline-none focus:border-[#897568] w-32"
+            className="border border-[#DDD5C4] px-2 py-1 text-xs text-[#3D2B1F] focus:outline-none focus:border-[#897568] w-28"
           />
-          <button
-            type="button"
-            onClick={() => { addTalla(newTalla); setNewTalla(""); }}
-            className="text-xs text-[#897568] hover:text-[#3D2B1F] flex items-center gap-1"
-          >
+          <button type="button" onClick={() => { addTalla(newTalla); setNewTalla(""); }} className="text-xs text-[#897568] hover:text-[#3D2B1F] flex items-center gap-1">
             <Plus size={12} /> Agregar
           </button>
         </div>
@@ -160,15 +157,10 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
 
       {/* Colores */}
       <div>
-        <p className="text-[10px] tracking-[0.18em] uppercase text-[#897568] font-[600] mb-2">
-          Colores disponibles
-        </p>
+        <p className="text-[10px] tracking-[0.18em] uppercase text-[#897568] font-[600] mb-2">Colores</p>
         <div className="flex flex-wrap gap-1.5 mb-2">
           {colores.map((c) => (
-            <span
-              key={c}
-              className="flex items-center gap-1 px-2 py-0.5 text-xs bg-[#F3EDE0] text-[#3D2B1F] border border-[#DDD5C4]"
-            >
+            <span key={c} className="flex items-center gap-1 px-2 py-0.5 text-xs bg-[#F3EDE0] text-[#3D2B1F] border border-[#DDD5C4]">
               {c}
               <button type="button" onClick={() => removeColor(c)}>
                 <X size={10} className="text-[#897568] hover:text-[#B5888A]" />
@@ -180,36 +172,27 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
           <input
             value={newColor}
             onChange={(e) => setNewColor(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") { e.preventDefault(); addColor(newColor); setNewColor(""); }
-            }}
-            placeholder="Ej: Negro, Blanco, Rojo…"
-            className="border border-[#DDD5C4] px-2 py-1 text-xs text-[#3D2B1F] focus:outline-none focus:border-[#897568] w-48"
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addColor(newColor); setNewColor(""); } }}
+            placeholder="Ej: Negro, Blanco…"
+            className="border border-[#DDD5C4] px-2 py-1 text-xs text-[#3D2B1F] focus:outline-none focus:border-[#897568] w-44"
           />
-          <button
-            type="button"
-            onClick={() => { addColor(newColor); setNewColor(""); }}
-            className="text-xs text-[#897568] hover:text-[#3D2B1F] flex items-center gap-1"
-          >
+          <button type="button" onClick={() => { addColor(newColor); setNewColor(""); }} className="text-xs text-[#897568] hover:text-[#3D2B1F] flex items-center gap-1">
             <Plus size={12} /> Agregar
           </button>
         </div>
       </div>
 
-      {/* Matriz talla × color */}
+      {/* Matriz */}
       {tallas.length > 0 && colores.length > 0 && (
         <div className="overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+          <table className="text-xs border-collapse">
             <thead>
               <tr>
                 <th className="text-left text-[9px] tracking-[0.15em] uppercase text-[#897568] font-[600] pb-2 pr-4 whitespace-nowrap">
                   Talla / Color
                 </th>
                 {colores.map((c) => (
-                  <th
-                    key={c}
-                    className="text-center text-[9px] tracking-[0.15em] uppercase text-[#897568] font-[600] pb-2 px-2 whitespace-nowrap"
-                  >
+                  <th key={c} className="text-center text-[9px] tracking-[0.12em] uppercase text-[#897568] font-[600] pb-2 px-3 whitespace-nowrap">
                     {c}
                   </th>
                 ))}
@@ -218,46 +201,65 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
             <tbody>
               {tallas.map((t) => (
                 <tr key={t} className="border-t border-[#F3EDE0]">
-                  <td className="py-2 pr-4 font-[500] text-[#3D2B1F] whitespace-nowrap">{t}</td>
+                  <td className="py-3 pr-4 font-[600] text-[#3D2B1F] whitespace-nowrap align-top">{t}</td>
                   {colores.map((c) => {
-                    const variant = getVariant(t, c);
-                    if (!variant) return <td key={c} />;
+                    const v = getVariant(t, c);
+                    if (!v) return <td key={c} />;
                     return (
-                      <td key={c} className="py-2 px-2 align-top">
-                        <div className="space-y-1 min-w-[120px]">
+                      <td key={c} className="py-3 px-3 align-top">
+                        <div className="space-y-1.5 min-w-[160px]">
                           {/* SKU */}
                           <input
-                            value={variant.sku}
+                            value={v.sku}
                             onChange={(e) => updateVariant(t, c, "sku", e.target.value)}
                             placeholder="SKU"
                             className={inputCls}
                             title="SKU"
                           />
-                          {/* Stock */}
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#897568] w-10 shrink-0">Stock</span>
-                            <input
-                              type="number"
-                              min={0}
-                              value={variant.stock}
-                              onChange={(e) => updateVariant(t, c, "stock", e.target.value)}
-                              className={inputCls}
-                            />
-                          </div>
                           {/* Precio override */}
                           <div className="flex items-center gap-1">
-                            <span className="text-[9px] text-[#897568] w-10 shrink-0">Precio</span>
+                            <span className="text-[9px] text-[#897568] w-12 shrink-0">Precio</span>
                             <input
-                              type="number"
-                              min={0}
-                              step={100}
-                              value={variant.price ?? ""}
+                              type="number" min={0} step={100}
+                              value={v.price ?? ""}
                               onChange={(e) => updateVariant(t, c, "price", e.target.value)}
                               placeholder={String(basePrice)}
                               className={cn(inputCls, "placeholder:text-[#CEC3AB]")}
-                              title="Dejar vacío para usar el precio base"
                             />
                           </div>
+                          {/* Pre-stock */}
+                          <div className="flex items-center gap-1">
+                            <span className="text-[9px] text-[#897568] w-12 shrink-0 leading-tight">Pre-stock</span>
+                            <input
+                              type="number" min={0}
+                              value={v.stock_pre_producido}
+                              onChange={(e) => updateVariant(t, c, "stock_pre_producido", e.target.value)}
+                              className={inputCls}
+                              title="Unidades listas para envío rápido"
+                            />
+                          </div>
+                          {/* Bajo demanda */}
+                          <label className="flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={v.bajo_demanda_habilitado}
+                              onChange={(e) => updateVariant(t, c, "bajo_demanda_habilitado", e.target.checked)}
+                              className="accent-[#3D2B1F]"
+                            />
+                            <span className="text-[9px] text-[#897568]">Bajo demanda</span>
+                          </label>
+                          {/* Tiempo producción (solo si bajo demanda) */}
+                          {v.bajo_demanda_habilitado && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[9px] text-[#897568] w-12 shrink-0 leading-tight">Días prod.</span>
+                              <input
+                                type="number" min={1} max={30}
+                                value={v.tiempo_produccion_dias}
+                                onChange={(e) => updateVariant(t, c, "tiempo_produccion_dias", e.target.value)}
+                                className={cn(inputCls, "w-14")}
+                              />
+                            </div>
+                          )}
                         </div>
                       </td>
                     );
@@ -266,8 +268,8 @@ export function VariantManager({ variants, onChange, basePrice }: Props) {
               ))}
             </tbody>
           </table>
-          <p className="text-[10px] text-[#897568] mt-2">
-            Precio vacío = usa el precio base del producto. SKU se genera automáticamente, puedes editarlo.
+          <p className="text-[10px] text-[#897568] mt-3">
+            Pre-stock = unidades físicas listas. Bajo demanda = se acepta el pedido aunque no haya stock.
           </p>
         </div>
       )}

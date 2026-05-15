@@ -6,12 +6,20 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { formatCOP, formatDate } from "@/lib/utils/format";
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
+  // Flujo A
   pending_payment: { label: "Pendiente de pago", cls: "text-amber-700 bg-amber-50 border-amber-200" },
-  paid: { label: "Pagado", cls: "text-blue-700 bg-blue-50 border-blue-200" },
-  preparing: { label: "En preparación", cls: "text-purple-700 bg-purple-50 border-purple-200" },
-  shipped: { label: "Enviado", cls: "text-cyan-700 bg-cyan-50 border-cyan-200" },
+  paid: { label: "Pago confirmado", cls: "text-blue-700 bg-blue-50 border-blue-200" },
+  preparing: { label: "Empacando tu pedido", cls: "text-purple-700 bg-purple-50 border-purple-200" },
+  en_produccion: { label: "En producción", cls: "text-indigo-700 bg-indigo-50 border-indigo-200" },
+  shipped: { label: "En camino", cls: "text-cyan-700 bg-cyan-50 border-cyan-200" },
   delivered: { label: "Entregado", cls: "text-green-700 bg-green-50 border-green-200" },
   cancelled: { label: "Cancelado", cls: "text-gray-500 bg-gray-50 border-gray-200" },
+  // Flujos B/C
+  cotizacion_pendiente: { label: "Cotización en proceso", cls: "text-orange-700 bg-orange-50 border-orange-200" },
+  pendiente_aprobacion: { label: "Revisando tu diseño", cls: "text-amber-700 bg-amber-50 border-amber-200" },
+  en_ajustes: { label: "Diseño en ajustes", cls: "text-sky-700 bg-sky-50 border-sky-200" },
+  aprobado_pendiente_pago: { label: "¡Aprobado! Lista para pagar", cls: "text-[#b85539] bg-orange-50 border-[#b85539]" },
+  rechazado: { label: "No pudimos continuar", cls: "text-gray-500 bg-gray-50 border-gray-200" },
 };
 
 export default async function PedidoDetallePage({
@@ -59,7 +67,7 @@ export default async function PedidoDetallePage({
   const { data: order } = await db
     .from("orders")
     .select(
-      `*, order_items (id, product_name, variant_sku, variant_attrs, quantity, unit_price, total_price)`
+      `*, order_items (id, product_name, variant_sku, variant_attrs, quantity, unit_price, total_price), cotizacion_attachments(file_url, file_name, file_type)`
     )
     .eq("id", id)
     .eq("customer_id", customerId)
@@ -81,6 +89,32 @@ export default async function PedidoDetallePage({
       >
         <ArrowLeft size={12} /> Mis pedidos
       </Link>
+
+      {/* CTA pago para B/C aprobados */}
+      {order.status === "aprobado_pendiente_pago" && order.wompi_link_url && (
+        <div className="mb-6 p-5 bg-[#f0c419]/10 border border-[#f0c419] text-center">
+          <p className="text-sm font-[600] text-[#3D2B1F] mb-1">¡Tu pedido está aprobado!</p>
+          <p className="text-xs text-[#6a6356] mb-4">
+            Completa el pago para que empecemos a producirlo.
+          </p>
+          <a
+            href={order.wompi_link_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-8 py-3 bg-[#f0c419] text-[#0e0e0e] text-[11px] tracking-[0.2em] uppercase font-[700] hover:bg-[#e0b410] transition-colors"
+          >
+            Pagar ahora →
+          </a>
+        </div>
+      )}
+
+      {/* Rechazo */}
+      {order.status === "rechazado" && order.rejection_reason && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-xs text-red-700">
+          <p className="font-[600] mb-1">Motivo:</p>
+          <p>{order.rejection_reason}</p>
+        </div>
+      )}
 
       <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
         <div>
