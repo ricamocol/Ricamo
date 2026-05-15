@@ -120,6 +120,22 @@ export async function POST(req: NextRequest) {
       notes: "Pedido creado — esperando confirmación de Wompi",
     });
 
+    // 5. Registrar promotion_id en notes para atribución de influencer — RB-INF-02
+    if (form.coupon_code) {
+      const { data: promo } = await supabase
+        .from("promotions")
+        .select("id, influencer_id")
+        .eq("code", form.coupon_code.toUpperCase())
+        .eq("is_active", true)
+        .maybeSingle();
+      if (promo?.influencer_id) {
+        await supabase
+          .from("orders")
+          .update({ notes: `promotion_id:${promo.id}` })
+          .eq("id", order.id);
+      }
+    }
+
     // 5. Construir datos de Wompi con el total validado en servidor
     const validatedTotal = Math.max(0, subtotal - discountAmount + courierResult.cost);
     const amountInCents = Math.round(validatedTotal * 100);
