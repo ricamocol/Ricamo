@@ -52,7 +52,7 @@ export default function NuevaContrasenaPage() {
         <div className="bg-white border border-[#DDD5C4] p-10 space-y-4">
           <h1
             className="text-2xl text-[#3D2B1F]"
-            style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif" }}
+            style={{ fontFamily: "'Instrument Serif', serif" }}
           >
             ¡Contraseña actualizada!
           </h1>
@@ -75,7 +75,7 @@ export default function NuevaContrasenaPage() {
       <div className="mb-8 text-center">
         <h1
           className="text-3xl text-[#3D2B1F] mb-2"
-          style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           Nueva contraseña
         </h1>

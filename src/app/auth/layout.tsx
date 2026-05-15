@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <Link href="/" className="inline-block">
           <span
             className="text-2xl text-[#3D2B1F]"
-            style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif", fontStyle: "italic" }}
+            style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
           >
             Ricamo
           </span>

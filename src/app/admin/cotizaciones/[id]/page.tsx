@@ -73,7 +73,7 @@ export default async function CotizacionDetallePage({ params }: Props) {
           <div className="flex items-center gap-3">
             <h1
               className="text-2xl text-[#3D2B1F]"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Instrument Serif', serif" }}
             >
               {order.order_number}
             </h1>

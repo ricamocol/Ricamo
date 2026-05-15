@@ -45,7 +45,7 @@ async function getNewestProducts(): Promise<Product[]> {
       is_on_sale: !!compare_price && compare_price > base_price,
       effective_price: base_price,
       variants: [],
-    } as Product;
+    } as unknown as Product;
   });
 }
 

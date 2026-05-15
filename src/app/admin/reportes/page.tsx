@@ -127,7 +127,7 @@ export default async function AdminReportesPage() {
     <div className="max-w-5xl space-y-10">
       <h1
         className="text-3xl text-[#3D2B1F]"
-        style={{ fontFamily: "'Playfair Display', serif" }}
+        style={{ fontFamily: "'Instrument Serif', serif" }}
       >
         Reportes
       </h1>

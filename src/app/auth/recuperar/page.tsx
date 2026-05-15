@@ -35,7 +35,7 @@ export default function RecuperarPage() {
         <div className="bg-white border border-[#DDD5C4] p-10 space-y-4">
           <h1
             className="text-2xl text-[#3D2B1F]"
-            style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif" }}
+            style={{ fontFamily: "'Instrument Serif', serif" }}
           >
             Revisa tu correo
           </h1>
@@ -60,7 +60,7 @@ export default function RecuperarPage() {
       <div className="mb-8 text-center">
         <h1
           className="text-3xl text-[#3D2B1F] mb-2"
-          style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           Recuperar contraseña
         </h1>

@@ -19,7 +19,7 @@ export default async function AdminConfiguradorPage() {
         <div>
           <h1
             className="text-3xl text-[#3D2B1F]"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'Instrument Serif', serif" }}
           >
             Diseños del configurador
           </h1>

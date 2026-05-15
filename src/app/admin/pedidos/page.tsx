@@ -102,7 +102,7 @@ export default async function AdminPedidosPage({ searchParams }: Props) {
       <div className="flex items-center justify-between mb-6">
         <h1
           className="text-3xl text-[#3D2B1F]"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           Pedidos
         </h1>

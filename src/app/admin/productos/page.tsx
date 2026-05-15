@@ -28,7 +28,7 @@ export default async function AdminProductosPage() {
       <div className="flex items-center justify-between mb-6">
         <h1
           className="text-3xl text-[#3D2B1F]"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           Productos
         </h1>
@@ -81,7 +81,7 @@ export default async function AdminProductosPage() {
                     ) : (
                       <div className="w-10 h-12 bg-[#EAC9C9]/20 flex items-center justify-center">
                         <span className="text-[10px] text-[#897568]"
-                          style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>
+                          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}>
                           MB
                         </span>
                       </div>

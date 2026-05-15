@@ -5,7 +5,7 @@ export default function NuevoInfluencerPage() {
     <div className="max-w-xl">
       <h1
         className="text-3xl text-[#3D2B1F] mb-6"
-        style={{ fontFamily: "'Playfair Display', serif" }}
+        style={{ fontFamily: "'Instrument Serif', serif" }}
       >
         Nuevo influencer
       </h1>

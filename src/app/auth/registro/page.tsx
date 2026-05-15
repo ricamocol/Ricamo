@@ -74,7 +74,7 @@ export default function RegistroPage() {
     return (
       <div className="w-full max-w-md text-center">
         <div className="bg-white border border-[#DDD5C4] p-10 space-y-4">
-          <div className="text-3xl mb-2" style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif" }}>
+          <div className="text-3xl mb-2" style={{ fontFamily: "'Instrument Serif', serif" }}>
             ¡Casi listo!
           </div>
           <p className="text-sm text-[#897568]">
@@ -98,7 +98,7 @@ export default function RegistroPage() {
       <div className="mb-8 text-center">
         <h1
           className="text-3xl text-[#3D2B1F] mb-2"
-          style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           Crear cuenta
         </h1>

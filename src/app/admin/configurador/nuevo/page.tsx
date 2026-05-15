@@ -52,7 +52,7 @@ export default function NuevoDisenioConfiguradorPage() {
         </Link>
         <h1
           className="text-3xl text-[#3D2B1F]"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           Nuevo diseño
         </h1>

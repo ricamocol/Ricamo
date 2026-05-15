@@ -45,7 +45,7 @@ export function AdminSidebar() {
         <Link href="/" target="_blank">
           <span
             className="text-xl text-[#F3EDE0]"
-            style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+            style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
           >
             Ricamo
           </span>

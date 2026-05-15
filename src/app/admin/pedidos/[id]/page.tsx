@@ -67,7 +67,7 @@ export default async function AdminPedidoDetailPage({ params }: Props) {
         </Link>
         <h1
           className="text-2xl text-[#3D2B1F] font-mono"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           {order.order_number}
         </h1>
