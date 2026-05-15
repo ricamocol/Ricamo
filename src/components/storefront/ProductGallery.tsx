@@ -17,7 +17,7 @@ export function ProductGallery({ images, name }: Props) {
       <div className="aspect-[3/4] bg-[#EAC9C9]/20 flex items-center justify-center">
         <span
           className="text-4xl text-[#897568]"
-          style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
         >
           MB
         </span>

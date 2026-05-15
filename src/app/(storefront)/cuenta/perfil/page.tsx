@@ -95,7 +95,7 @@ export default function PerfilPage() {
     <div className="space-y-6">
       <h2
         className="text-xl text-[#3D2B1F]"
-        style={{ fontFamily: "'Playfair Display', serif" }}
+        style={{ fontFamily: "'Instrument Serif', serif" }}
       >
         Mis datos
       </h2>

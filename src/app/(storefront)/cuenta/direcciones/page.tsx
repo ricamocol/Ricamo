@@ -145,7 +145,7 @@ export default function DireccionesPage() {
       <div className="flex items-center justify-between mb-5">
         <h2
           className="text-xl text-[#3D2B1F]"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
           Direcciones
         </h2>

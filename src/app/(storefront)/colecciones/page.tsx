@@ -27,7 +27,7 @@ export default async function ColeccionesPage() {
         </span>
         <h1
           className="text-5xl text-[#3D2B1F] mt-1"
-          style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
         >
           Eventos
         </h1>
@@ -40,7 +40,7 @@ export default async function ColeccionesPage() {
         <div className="text-center py-24">
           <p
             className="text-2xl text-[#897568]"
-            style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+            style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
           >
             Próximamente
           </p>
@@ -75,7 +75,7 @@ export default async function ColeccionesPage() {
                     <div className="absolute inset-0 bg-gradient-to-br from-[#EAC9C9]/60 via-[#F3EDE0] to-[#DDD5C4]/60" />
                     <span
                       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-[#3D2B1F]/20 select-none"
-                      style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+                      style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
                     >
                       R
                     </span>
@@ -90,7 +90,7 @@ export default async function ColeccionesPage() {
                   <div className="translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <h2
                       className="text-2xl text-white drop-shadow-md leading-tight"
-                      style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+                      style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
                     >
                       {col.name}
                     </h2>
@@ -111,7 +111,7 @@ export default async function ColeccionesPage() {
                 <div className="pt-4 pb-2">
                   <h2
                     className="text-xl text-[#3D2B1F]"
-                    style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+                    style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
                   >
                     {col.name}
                   </h2>

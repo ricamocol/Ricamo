@@ -59,7 +59,7 @@ export default async function ConfirmacionPage({ params }: Props) {
 
       <h1
         className="text-4xl text-[#3D2B1F] mb-2"
-        style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+        style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
       >
         {order.status === "paid" || order.status === "en_produccion"
           ? "¡Pedido confirmado!"

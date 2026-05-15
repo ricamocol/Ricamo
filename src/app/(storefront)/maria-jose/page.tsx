@@ -39,7 +39,7 @@ export default function MariaJosePage() {
           </span>
           <h1
             className="text-5xl text-[#3D2B1F] mt-3 mb-5 leading-tight"
-            style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+            style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
           >
             María José
           </h1>
@@ -57,7 +57,7 @@ export default function MariaJosePage() {
           <div className="aspect-[3/4] bg-gradient-to-br from-[#EAC9C9]/40 to-[#CEC3AB]/30 flex items-center justify-center">
             <span
               className="text-5xl text-[#B5888A]/40"
-              style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+              style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
             >
               MJ
             </span>
@@ -69,7 +69,7 @@ export default function MariaJosePage() {
             </span>
             <h2
               className="text-3xl text-[#3D2B1F] mt-2 mb-5"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Instrument Serif', serif" }}
             >
               Camisetas que cuentan una historia
             </h2>
@@ -102,7 +102,7 @@ export default function MariaJosePage() {
             </span>
             <h2
               className="text-4xl text-[#3D2B1F] mt-2"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Instrument Serif', serif" }}
             >
               Los valores de la marca
             </h2>
@@ -113,7 +113,7 @@ export default function MariaJosePage() {
                 <div className="w-10 h-px bg-[#B5888A] mx-auto mb-4" />
                 <h3
                   className="text-lg text-[#3D2B1F] mb-2"
-                  style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+                  style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
                 >
                   {v.title}
                 </h3>
@@ -132,7 +132,7 @@ export default function MariaJosePage() {
           </span>
           <h2
             className="text-4xl text-[#3D2B1F] mt-2"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'Instrument Serif', serif" }}
           >
             En sus redes
           </h2>
@@ -168,7 +168,7 @@ export default function MariaJosePage() {
         </span>
         <h2
           className="text-3xl text-[#F3EDE0] mt-3 mb-5"
-          style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
         >
           Viste el evento
         </h2>

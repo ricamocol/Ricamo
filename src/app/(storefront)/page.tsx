@@ -17,12 +17,11 @@ async function getNewestProducts(): Promise<Product[]> {
     .from("products")
     .select(`
       id, name, slug, base_price, compare_price, images,
-      is_on_sale, effective_price, is_sold_out,
       product_variants (
         stock_pre_producido, bajo_demanda_habilitado, tiempo_produccion_dias
       )
     `)
-    .eq("status", "published")
+    .eq("status", "active")
     .order("created_at", { ascending: false })
     .limit(4);
 
@@ -36,7 +35,17 @@ async function getNewestProducts(): Promise<Product[]> {
       delivery_mode = "on_demand";
       tiempo_produccion_dias = variants.find((v) => v.bajo_demanda_habilitado)?.tiempo_produccion_dias ?? 3;
     }
-    return { ...p, delivery_mode, tiempo_produccion_dias } as Product;
+    const base_price = p.base_price as number;
+    const compare_price = p.compare_price as number | null;
+    return {
+      ...p,
+      delivery_mode,
+      tiempo_produccion_dias,
+      is_sold_out: delivery_mode === "sold_out",
+      is_on_sale: !!compare_price && compare_price > base_price,
+      effective_price: base_price,
+      variants: [],
+    } as Product;
   });
 }
 

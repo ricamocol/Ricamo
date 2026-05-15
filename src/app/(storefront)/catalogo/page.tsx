@@ -115,7 +115,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
         </span>
         <h1
           className="text-5xl text-[#3D2B1F] mt-1"
-          style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
         >
           Catálogo
         </h1>
@@ -148,7 +148,7 @@ export default async function CatalogoPage({ searchParams }: Props) {
             <div className="text-center py-24">
               <p
                 className="text-2xl text-[#897568]"
-                style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+                style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
               >
                 Sin resultados
               </p>

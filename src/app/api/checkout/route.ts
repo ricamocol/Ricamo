@@ -73,6 +73,7 @@ export async function POST(req: NextRequest) {
       .insert({
         order_number: orderNumber,
         customer_id: customerId,
+        flow: "A",
         status: "pending_payment",
         shipping_name: form.full_name,
         shipping_email: form.email.toLowerCase(),

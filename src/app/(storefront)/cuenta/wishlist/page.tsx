@@ -69,7 +69,7 @@ export default function WishlistPage() {
     <div>
       <h2
         className="text-xl text-[#3D2B1F] mb-5"
-        style={{ fontFamily: "'Playfair Display', serif" }}
+        style={{ fontFamily: "'Instrument Serif', serif" }}
       >
         Wishlist
       </h2>

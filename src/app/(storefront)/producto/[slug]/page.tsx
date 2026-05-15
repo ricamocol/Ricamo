@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: Props) {
           {/* Nombre */}
           <h1
             className="text-3xl sm:text-4xl text-[#3D2B1F] leading-tight mb-4"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'Instrument Serif', serif" }}
           >
             {product.name}
           </h1>

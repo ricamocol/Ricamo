@@ -17,7 +17,7 @@ export default function CarritoPage() {
         <ShoppingBag size={48} strokeWidth={1} className="text-[#CEC3AB]" />
         <h1
           className="text-3xl text-[#3D2B1F]"
-          style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
         >
           Tu carrito está vacío
         </h1>
@@ -38,7 +38,7 @@ export default function CarritoPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <h1
         className="text-4xl text-[#3D2B1F] mb-8"
-        style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+        style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
       >
         Tu carrito
       </h1>
@@ -64,10 +64,10 @@ export default function CarritoPage() {
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span
-                      className="text-lg text-[#897568]"
-                      style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
+                      className="text-lg text-[#6a6356]"
+                      style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
                     >
-                      MB
+                      R
                     </span>
                   </div>
                 )}
