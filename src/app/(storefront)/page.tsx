@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { createServiceClient } from "@/lib/supabase/server";
 import { ProductCard } from "@/components/storefront/ProductCard";
+import { FeriaGanaderaBanner } from "@/components/storefront/FeriaGanaderaBanner";
 import type { Product, DeliveryMode } from "@/types";
 
 const COLLECTIONS = [
@@ -54,76 +55,8 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section className="relative min-h-[95vh] flex items-center bg-[#faf7f1] pt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-
-            {/* TEXTO */}
-            <div>
-              <span className="inline-block text-[11px] tracking-[0.3em] uppercase text-[#6a6356] mb-6 font-[500]">
-                Colecciones 2026
-              </span>
-
-              <h1
-                className="text-[72px] sm:text-[96px] leading-[0.9] text-[#0e0e0e] mb-6"
-                style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
-              >
-                Vístete<br />
-                <span className="text-[#f0c419]" style={{ fontFamily: "'Caveat', cursive", fontStyle: "normal", fontSize: "0.85em" }}>
-                  de lo que
-                </span><br />
-                amas.
-              </h1>
-
-              <p className="text-base text-[#6a6356] mb-10 leading-relaxed max-w-sm font-[300]">
-                Camisetas temáticas para festivales y eventos de Colombia.
-                Diseñadas con alma, llevadas con orgullo.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/catalogo"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#0e0e0e] text-[#faf7f1] text-[11px] tracking-[0.2em] uppercase font-[600] hover:bg-[#f0c419] hover:text-[#0e0e0e] transition-all duration-300"
-                >
-                  Ver catálogo <ArrowRight size={14} />
-                </Link>
-                <Link
-                  href="/configura"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-[#0e0e0e] text-[#0e0e0e] text-[11px] tracking-[0.2em] uppercase font-[600] hover:bg-[#0e0e0e] hover:text-[#faf7f1] transition-all duration-300"
-                >
-                  Diseña la tuya
-                </Link>
-              </div>
-            </div>
-
-            {/* BLOQUE AMARILLO DECORATIVO */}
-            <div className="hidden md:flex items-center justify-center">
-              <div className="relative w-[420px] h-[480px] bg-[#f0c419]">
-                <div className="absolute inset-0 flex flex-col items-center justify-center px-12">
-                  <Image
-                    src="/logos/logo-black.png"
-                    alt="Ricamo — lo creas, lo llevas"
-                    width={320}
-                    height={140}
-                    className="w-full h-auto"
-                    priority
-                  />
-                </div>
-                {/* Detalles decorativos */}
-                <div className="absolute bottom-6 right-6 w-16 h-16 border border-[#0e0e0e]/20 rounded-full" />
-                <div className="absolute top-6 left-6 w-8 h-8 border border-[#0e0e0e]/20 rounded-full" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-          <span className="text-[9px] tracking-[0.25em] uppercase text-[#6a6356]">Scroll</span>
-          <div className="w-px h-10 bg-[#6a6356]" />
-        </div>
-      </section>
+      {/* ── HERO — Banner Feria Ganadera ─────────────────────────── */}
+      <FeriaGanaderaBanner />
 
       {/* ── COLECCIONES ─────────────────────────────────────────── */}
       <section className="bg-[#0e0e0e] py-20">
