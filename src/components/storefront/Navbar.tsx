@@ -83,7 +83,7 @@ export function Navbar() {
               alt="Ricamo"
               width={600}
               height={150}
-              className="h-10 w-auto"
+              className="h-12 w-auto"
               priority
             />
           </Link>
