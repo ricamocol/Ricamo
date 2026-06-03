@@ -254,21 +254,15 @@ export default async function HomePage() {
                 Tu diseño,<br />tu camiseta.
               </h2>
               <p className="text-sm text-[#0e0e0e]/60 leading-loose mb-8 font-[300]">
-                Escoge la base, aplica tu diseño favorito y agrega tu nombre o frase.
-                Producida especialmente para ti.
+                Tienes una idea en mente? Cuéntanos. Cotizamos tu diseño personalizado
+                y lo producimos especialmente para ti.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
-                  href="/configura"
+                  href="/cotiza"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-[#0e0e0e] text-[#faf7f1] text-[11px] tracking-[0.2em] uppercase font-[600] hover:bg-[#2a2a2a] transition-colors"
                 >
-                  Ir al configurador <ArrowRight size={12} />
-                </Link>
-                <Link
-                  href="/cotiza"
-                  className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-[#0e0e0e] border-b-2 border-[#0e0e0e] pb-0.5 hover:border-[#2a2a2a]/50 transition-colors font-[600] self-center"
-                >
-                  ¿Idea más compleja? Cotízala <ArrowRight size={12} />
+                  Cotiza tu diseño <ArrowRight size={12} />
                 </Link>
               </div>
             </div>

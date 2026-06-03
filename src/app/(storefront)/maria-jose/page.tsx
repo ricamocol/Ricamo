@@ -217,7 +217,7 @@ export default function MariaJosePage() {
           Viste el evento
         </h2>
         <p className="text-sm text-[#CEC3AB] mb-8 font-[300] max-w-md mx-auto">
-          Encuentra la camiseta de tu feria favorita o diseña la tuya.
+          Encuentra la camiseta de tu feria favorita o cotiza tu diseño personalizado.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
@@ -227,10 +227,10 @@ export default function MariaJosePage() {
             Ver colecciones <ArrowRight size={13} />
           </Link>
           <Link
-            href="/configura"
+            href="/cotiza"
             className="inline-flex items-center gap-2 px-8 py-3 border border-[#EAC9C9] text-[#EAC9C9] text-[11px] tracking-[0.2em] uppercase font-[500] hover:bg-[#EAC9C9] hover:text-[#3D2B1F] transition-colors"
           >
-            Diseña la tuya
+            Cotiza tu diseño
           </Link>
         </div>
       </section>

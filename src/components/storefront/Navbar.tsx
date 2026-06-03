@@ -11,7 +11,6 @@ import { useCartStore } from "@/lib/store/cart";
 const NAV_LINKS = [
   { href: "/catalogo", label: "Catálogo" },
   { href: "/colecciones", label: "Eventos" },
-  { href: "/configura", label: "Diseña" },
   { href: "/cotiza", label: "Cotiza" },
   { href: "/maria-jose", label: "María José" },
 ];
@@ -58,7 +57,7 @@ export function Navbar() {
 
           {/* NAV LINKS — izquierda */}
           <nav className="hidden md:flex items-center gap-7">
-            {NAV_LINKS.slice(0, 3).map((link) => (
+            {NAV_LINKS.slice(0, 2).map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -91,7 +90,7 @@ export function Navbar() {
 
           {/* NAV LINKS — derecha (desktop) */}
           <nav className="hidden md:flex items-center gap-7">
-            {NAV_LINKS.slice(3).map((link) => (
+            {NAV_LINKS.slice(2).map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
