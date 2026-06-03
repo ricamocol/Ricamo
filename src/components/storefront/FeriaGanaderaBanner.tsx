@@ -52,7 +52,7 @@ export function FeriaGanaderaBanner() {
       </div>
 
       {/* ── Texto + CTA ──────────────────────────────────── */}
-      <div className="border-t border-white/[0.07] px-6 md:px-14 py-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="border-t border-white/[0.07] px-6 md:px-14 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2
             className="text-[clamp(2.2rem,5vw,4.5rem)] text-white leading-none"

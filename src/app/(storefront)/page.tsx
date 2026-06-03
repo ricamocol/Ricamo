@@ -59,7 +59,7 @@ export default async function HomePage() {
       <FeriaGanaderaBanner />
 
       {/* ── COLECCIONES ─────────────────────────────────────────── */}
-      <section className="bg-[#0e0e0e] py-20">
+      <section className="bg-[#0e0e0e] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10">
             <div>
