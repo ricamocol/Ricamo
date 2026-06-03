@@ -84,27 +84,27 @@ export default async function HomePage() {
                 lugares que nos llenan de orgullo.
               </p>
             </div>
-            <div className="flex flex-col gap-1.5">
-              {/* Logo encima de las cifras */}
-              <div className="bg-[#0e0e0e] flex items-center justify-center py-6">
+            <div className="flex flex-col gap-6">
+              {/* Logo sobre fondo amarillo */}
+              <div className="flex justify-center md:justify-start">
                 <Image
                   src="/logos/logo-black.png"
                   alt="Ricamo"
                   width={260}
                   height={65}
-                  className="h-14 w-auto brightness-0 invert"
+                  className="h-14 w-auto"
                 />
               </div>
-              {/* Cifras */}
+              {/* Cifras en cajones blancos */}
               <div className="grid grid-cols-3 gap-1.5">
                 {[
                   { valor: "+490", label: "Diseños" },
                   { valor: "+2.500", label: "Clientes" },
                   { valor: "4 años", label: "De experiencia" },
                 ].map(({ valor, label }) => (
-                  <div key={label} className="text-center py-8 bg-[#0e0e0e]">
-                    <p className="text-2xl font-[600] text-white leading-none">{valor}</p>
-                    <p className="text-[9px] tracking-[0.15em] uppercase text-white/50 mt-2">{label}</p>
+                  <div key={label} className="text-center py-8 bg-white">
+                    <p className="text-2xl font-[600] text-[#0e0e0e] leading-none">{valor}</p>
+                    <p className="text-[9px] tracking-[0.15em] uppercase text-[#6a6356] mt-2">{label}</p>
                   </div>
                 ))}
               </div>
