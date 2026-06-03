@@ -53,7 +53,7 @@ export function Navbar() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-48">
 
           {/* NAV LINKS — izquierda */}
           <nav className="hidden md:flex items-center gap-7">
@@ -81,9 +81,9 @@ export function Navbar() {
             <Image
               src="/logos/logo-black.png"
               alt="Ricamo"
-              width={130}
-              height={44}
-              className="h-11 w-auto"
+              width={520}
+              height={176}
+              className="h-44 w-auto"
               priority
             />
           </Link>
