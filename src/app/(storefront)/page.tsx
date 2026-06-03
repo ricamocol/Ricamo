@@ -58,6 +58,53 @@ export default async function HomePage() {
       {/* ── HERO — Banner Feria Ganadera ─────────────────────────── */}
       <FeriaGanaderaBanner />
 
+      {/* ── QUIÉNES SOMOS ───────────────────────────────────────── */}
+      <section className="bg-[#faf7f1] py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[#b85539] font-[500]">
+                Nuestra historia
+              </span>
+              <h2
+                className="text-4xl text-[#0e0e0e] mt-2 mb-5 leading-tight"
+                style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
+              >
+                Camisetas que cuentan una historia
+              </h2>
+              <p className="text-sm text-[#6a6356] leading-loose font-[300] mb-4">
+                Ricamo nació de un amor real por los festivales colombianos. Cuando María José
+                buscó una camiseta que capturara el espíritu de la Feria Ganadera de Montería
+                y no encontró nada a su altura, la diseñó ella misma.
+              </p>
+              <p className="text-sm text-[#6a6356] leading-loose font-[300]">
+                Hoy somos una marca de camisetas temáticas para ferias y eventos de Colombia —
+                prendas con identidad, hechas para quienes viven cada festival desde adentro.
+                También personalizamos: si tienes una idea, la hacemos realidad.
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-1.5">
+              <div className="col-span-3 text-center py-5 border border-[#e8e0c8] bg-white">
+                <p className="text-3xl font-[600] text-[#0e0e0e]">3</p>
+                <p className="text-[10px] tracking-[0.2em] uppercase text-[#6a6356] mt-1">Colecciones activas</p>
+              </div>
+              <div className="text-center py-5 border border-[#e8e0c8] bg-white">
+                <p className="text-2xl font-[600] text-[#0e0e0e]">100%</p>
+                <p className="text-[9px] tracking-[0.15em] uppercase text-[#6a6356] mt-1">Colombiano</p>
+              </div>
+              <div className="text-center py-5 border border-[#e8e0c8] bg-white">
+                <p className="text-2xl font-[600] text-[#0e0e0e]">A tu talla</p>
+                <p className="text-[9px] tracking-[0.15em] uppercase text-[#6a6356] mt-1">XS — 3XL</p>
+              </div>
+              <div className="text-center py-5 border border-[#e8e0c8] bg-white">
+                <p className="text-2xl font-[600] text-[#0e0e0e]">✦</p>
+                <p className="text-[9px] tracking-[0.15em] uppercase text-[#6a6356] mt-1">Personalizable</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── COLECCIONES ─────────────────────────────────────────── */}
       <section className="bg-[#0e0e0e] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

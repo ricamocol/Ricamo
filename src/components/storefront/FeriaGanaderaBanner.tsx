@@ -52,31 +52,33 @@ export function FeriaGanaderaBanner() {
       </div>
 
       {/* ── Texto + CTA ──────────────────────────────────── */}
-      <div className="border-t border-white/[0.07] px-6 md:px-14 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2
-            className="text-[clamp(2.2rem,5vw,4.5rem)] text-white leading-none"
-            style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
-          >
-            La colección del año
-          </h2>
-          <p className="text-white/35 text-sm mt-3 font-[300] max-w-xs leading-relaxed">
+      <div className="border-t border-white/[0.07] px-6 md:px-14 py-6">
+        {/* Heading */}
+        <h2
+          className="text-[clamp(2rem,4vw,4rem)] text-white leading-none mb-4"
+          style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}
+        >
+          La colección del año
+        </h2>
+        {/* Descripción y botones en la misma línea */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <p className="text-white/40 text-sm font-[300] max-w-xs leading-relaxed">
             Diseños exclusivos para la feria más grande de la Costa Caribe colombiana.
           </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
-          <Link
-            href="/catalogo?coleccion=feria-ganadera"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#f0c419] text-[#0e0e0e] text-[11px] tracking-[0.25em] uppercase font-[700] hover:bg-white transition-colors"
-          >
-            Ver colección <ArrowRight size={12} />
-          </Link>
-          <Link
-            href="/cotiza"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/20 text-white/60 text-[11px] tracking-[0.25em] uppercase font-[500] hover:border-white/50 hover:text-white transition-colors"
-          >
-            Cotiza tu diseño
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <Link
+              href="/catalogo?coleccion=feria-ganadera"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#f0c419] text-[#0e0e0e] text-[11px] tracking-[0.25em] uppercase font-[700] hover:bg-white transition-colors"
+            >
+              Ver colección <ArrowRight size={12} />
+            </Link>
+            <Link
+              href="/cotiza"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/20 text-white/60 text-[11px] tracking-[0.25em] uppercase font-[500] hover:border-white/50 hover:text-white transition-colors"
+            >
+              Cotiza tu diseño
+            </Link>
+          </div>
         </div>
       </div>
     </section>
