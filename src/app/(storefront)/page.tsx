@@ -86,13 +86,13 @@ export default async function HomePage() {
             </div>
             <div className="flex flex-col gap-6">
               {/* Logo sobre fondo amarillo */}
-              <div className="flex justify-center md:justify-start">
+              <div className="flex justify-center">
                 <Image
                   src="/logos/logo-black.png"
                   alt="Ricamo"
-                  width={260}
-                  height={65}
-                  className="h-14 w-auto"
+                  width={400}
+                  height={100}
+                  className="h-24 w-auto"
                 />
               </div>
               {/* Cifras en cajones blancos */}
