@@ -59,11 +59,11 @@ export default async function HomePage() {
       <FeriaGanaderaBanner />
 
       {/* ── QUIÉNES SOMOS ───────────────────────────────────────── */}
-      <section className="bg-[#faf7f1] py-16">
+      <section className="bg-[#f0c419] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <span className="text-[10px] tracking-[0.3em] uppercase text-[#b85539] font-[500]">
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[#0e0e0e]/50 font-[500]">
                 Nuestra historia
               </span>
               <h2
@@ -72,29 +72,42 @@ export default async function HomePage() {
               >
                 Camisetas que cuentan una historia
               </h2>
-              <p className="text-sm text-[#6a6356] leading-loose font-[300]">
+              <p className="text-sm text-[#0e0e0e]/65 leading-loose font-[300]">
                 Ricamo es una marca que nace de las historias y la identidad que percibimos
                 con lo que usamos. Nacimos como una marca de personalizados — recreamos
                 mascotas, parejas, personajes, equipos, marcas y quién sabe cuántas locuras 😄
               </p>
-              <p className="text-sm text-[#6a6356] leading-loose font-[300] mt-4">
+              <p className="text-sm text-[#0e0e0e]/65 leading-loose font-[300] mt-4">
                 Es un proyecto inspirado en las historias, emociones y recuerdos que hacen
                 especial a cada persona. Con el tiempo, nuestra pasión por la personalización
                 evolucionó hacia un homenaje a Colombia, sus festividades, su cultura y los
                 lugares que nos llenan de orgullo.
               </p>
             </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[
-                { valor: "+490", label: "Diseños" },
-                { valor: "+2.500", label: "Clientes" },
-                { valor: "4 años", label: "De experiencia" },
-              ].map(({ valor, label }) => (
-                <div key={label} className="text-center py-8 border border-[#e8e0c8] bg-white">
-                  <p className="text-2xl font-[600] text-[#0e0e0e] leading-none">{valor}</p>
-                  <p className="text-[9px] tracking-[0.15em] uppercase text-[#6a6356] mt-2">{label}</p>
-                </div>
-              ))}
+            <div className="flex flex-col gap-1.5">
+              {/* Logo encima de las cifras */}
+              <div className="bg-[#0e0e0e] flex items-center justify-center py-6">
+                <Image
+                  src="/logos/logo-black.png"
+                  alt="Ricamo"
+                  width={260}
+                  height={65}
+                  className="h-14 w-auto brightness-0 invert"
+                />
+              </div>
+              {/* Cifras */}
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { valor: "+490", label: "Diseños" },
+                  { valor: "+2.500", label: "Clientes" },
+                  { valor: "4 años", label: "De experiencia" },
+                ].map(({ valor, label }) => (
+                  <div key={label} className="text-center py-8 bg-[#0e0e0e]">
+                    <p className="text-2xl font-[600] text-white leading-none">{valor}</p>
+                    <p className="text-[9px] tracking-[0.15em] uppercase text-white/50 mt-2">{label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
